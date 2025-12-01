@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Customer Service Feedback Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            display: ["Inter", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background-light font-display text-slate-900">
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-3xl bg-white rounded-xl shadow-lg border border-slate-200 p-6 sm:p-8 space-y-6">
+      <!-- Header + Language Toggle -->
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 id="title" class="text-2xl sm:text-3xl font-bold tracking-tight">
+            Customer Service Feedback Survey
+          </h1>
+          <p id="subtitle" class="mt-2 text-slate-600 text-sm sm:text-base">
+            Thank you for taking the time to provide your feedback. Your responses will help us improve our service.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="langBtnEn"
+            type="button"
+            class="px-3 py-1 rounded-full text-sm font-medium bg-primary text-white"
+          >
+            EN
+          </button>
+          <button
+            id="langBtnTr"
+            type="button"
+            class="px-3 py-1 rounded-full text-sm font-medium bg-slate-300 text-slate-900"
+          >
+            TR
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center text-xs sm:text-sm">
+          <span id="progressText" class="font-medium text-slate-700">
+            12% Complete
+          </span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+          <div
+            id="progressBar"
+            class="h-2 bg-primary transition-all duration-200"
+            style="width: 12%;"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Questions Container -->
+      <div id="questionsContainer" class="space-y-4">
+        <!-- JS dolduracak -->
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center pt-2">
+        <button
+          id="prevBtn"
+          type="button"
+          class="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <span id="prevText">Previous</span>
+        </button>
+        <button
+          id="nextBtn"
+          type="button"
+          class="px-5 py-2 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors"
+        >
+          <span id="nextText">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        title: "Customer Service Feedback Survey",
+        subtitle:
+          "Thank you for taking the time to provide your feedback. Your responses will help us improve our service.",
+        progressComplete: "Complete",
+        previous: "Previous",
+        next: "Next",
+        submit: "Submit",
+        questions: [
+          {
+            type: "likert",
+            question: "How satisfied are you with our customer service?",
+            options: [
+              "Strongly Agree",
+              "Agree",
+              "Undecided",
+              "Disagree",
+              "Strongly Disagree",
+            ],
+          },
+          {
+            type: "likert",
+            question: "How would you rate the quality of the product/service?",
+            options: [
+              "Strongly Agree",
+              "Agree",
+              "Undecided",
+              "Disagree",
+              "Strongly Disagree",
+            ],
+          },
+          {
+            type: "likert",
+            question:
+              "How would you rate the reliability and consistency of the service you received?",
+            options: [
+              "Strongly Agree",
+              "Agree",
+              "Undecided",
+              "Disagree",
+              "Strongly Disagree",
+            ],
+          },
+          {
+            type: "likert",
+            question: "How likely are you to recommend us to a friend?",
+            options: [
+              "5",
+              "4",
+              "3",
+              "2",
+              "1",
+            ],
+          },
+          {
+            type: "likert",
+            question: "Was the pricing fair and transparent?",
+            options: [
+              "Strongly Agree",
+              "Agree",
+              "Undecided",
+              "Disagree",
+              "Strongly Disagree",
+            ],
+          },
+          {
+            type: "likert",
+            question: "How would you rate the speed of service delivery?",
+            options: [
+              "5",
+              "4",
+              "3",
+              "2",
+              "1",
+            ],
+          },
+          {
+            type: "likert",
+            question: "Was the staff helpful and professional?",
+            options: [
+              "Strongly Agree",
+              "Agree",
+              "Undecided",
+              "Disagree",
+              "Strongly Disagree",
+            ],
+          },
+          {
+            type: "textarea",
+            question:
+              "Do you have any other comments, questions, or concerns?",
+          },
+        ],
+      },
+      tr: {
+        title: "Müşteri Hizmetleri Geri Bildirim Anketi",
+        subtitle:
+          "Geri bildirim sağlamak için zamanınızı ayırdığınız için teşekkür ederiz. Yanıtlarınız hizmetimizi iyileştirmemize yardımcı olacak.",
+        progressComplete: "Tamamlandı",
+        previous: "Önceki",
+        next: "Sonraki",
+        submit: "Gönder",
+        questions: [
+          {
+            type: "likert",
+            question: "Müşteri hizmetlerimizden ne kadar memnunsunuz?",
+            options: [
+              "Kesinlikle Katılıyorum",
+              "Katılıyorum",
+              "Kararsızım",
+              "Katılmıyorum",
+              "Kesinlikle Katılmıyorum",
+            ],
+          },
+          {
+            type: "likert",
+            question: "Ürün/hizmetin kalitesini nasıl değerlendirirsiniz?",
+            options: [
+              "Kesinlikle Katılıyorum",
+              "Katılıyorum",
+              "Kararsızım",
+              "Katılmıyorum",
+              "Kesinlikle Katılmıyorum",
+            ],
+          },
+          {
+            type: "likert",
+            question:
+              "Aldığınız hizmetin güvenilirliğini ve tutarlılığını nasıl değerlendirirsiniz?",
+            options: [
+              "Kesinlikle Katılıyorum",
+              "Katılıyorum",
+              "Kararsızım",
+              "Katılmıyorum",
+              "Kesinlikle Katılmıyorum",
+            ],
+          },
+          {
+            type: "likert",
+            question: "Bizi bir arkadaşa tavsiye etme olasılığınız nedir?",
+            options: [
+              "5",
+              "4",
+              "3",
+              "2",
+              "1",
+            ],
+          },
+          {
+            type: "likert",
+            question: "Fiyatlandırma adil ve şeffaf mıydı?",
+            options: [
+              "Kesinlikle Katılıyorum",
+              "Katılıyorum",
+              "Kararsızım",
+              "Katılmıyorum",
+              "Kesinlikle Katılmıyorum",
+            ],
+          },
+          {
+            type: "likert",
+            question: "Hizmet sunumunun hızını nasıl değerlendirirsiniz?",
+            options: [
+              "5",
+              "4",
+              "3",
+              "2",
+              "1",
+            ],
+          },
+          {
+            type: "likert",
+            question: "Personel yardımcı ve profesyonel miydi?",
+            options: [
+              "Kesinlikle Katılıyorum",
+              "Katılıyorum",
+              "Kararsızım",
+              "Katılmıyorum",
+              "Kesinlikle Katılmıyorum",
+            ],
+          },
+          {
+            type: "textarea",
+            question: "Başka yorum, soru veya endişeleriniz var mı?",
+          },
+        ],
+      },
+    };
+
+    let currentLanguage = "en";
+    let currentQuestion = 0;
+    const answers = {};
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      document.documentElement.lang = lang;
+      updateLanguageButtonStyles();
+      updateUI();
+    }
+
+    function updateLanguageButtonStyles() {
+      const enBtn = document.getElementById("langBtnEn");
+      const trBtn = document.getElementById("langBtnTr");
+      if (!enBtn || !trBtn) return;
+
+      if (currentLanguage === "en") {
+        enBtn.classList.add("bg-primary", "text-white");
+        enBtn.classList.remove("bg-slate-300", "text-slate-900");
+        trBtn.classList.remove("bg-primary", "text-white");
+        trBtn.classList.add("bg-slate-300", "text-slate-900");
+      } else {
+        trBtn.classList.add("bg-primary", "text-white");
+        trBtn.classList.remove("bg-slate-300", "text-slate-900");
+        enBtn.classList.remove("bg-primary", "text-white");
+        enBtn.classList.add("bg-slate-300", "text-slate-900");
+      }
+    }
+
+    function updateUI() {
+      const t = translations[currentLanguage];
+
+      const titleEl = document.getElementById("title");
+      const subtitleEl = document.getElementById("subtitle");
+      const prevText = document.getElementById("prevText");
+      const nextText = document.getElementById("nextText");
+
+      if (titleEl) titleEl.textContent = t.title;
+      if (subtitleEl) subtitleEl.textContent = t.subtitle;
+      if (prevText) prevText.textContent = t.previous;
+
+      // Son soruda "Gönder / Submit" yazsın, diğerlerinde "İleri / Next"
+      if (nextText) {
+        nextText.textContent =
+          currentQuestion === t.questions.length - 1 ? t.submit : t.next;
+      }
+
+      renderQuestion();
+      updateProgress();
+    }
+
+    function renderQuestion() {
+      const t = translations[currentLanguage];
+      const question = t.questions[currentQuestion];
+      const container = document.getElementById("questionsContainer");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      const qCard = document.createElement("div");
+      qCard.className = "p-4 @container";
+      const questionCountText =
+        currentLanguage === "en"
+          ? `Question ${currentQuestion + 1} of ${t.questions.length}`
+          : `Soru ${currentQuestion + 1} / ${t.questions.length}`;
+
+      qCard.innerHTML = `
+        <div class="flex flex-col items-stretch justify-start rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] bg-white border border-slate-200">
+          <div class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-4 p-6 sm:p-8">
+            <div class="flex flex-col gap-2">
+              <p class="text-primary text-lg font-bold leading-tight tracking-[-0.015em]">
+                ${questionCountText}
+              </p>
+              <p class="text-slate-700 text-base font-normal leading-normal">
+                ${question.question}
+              </p>
+            </div>
+            <div id="questionContent"></div>
+          </div>
+        </div>
+      `;
+      container.appendChild(qCard);
+
+      const content = document.getElementById("questionContent");
+      if (!content) return;
+
+      if (question.type === "likert") {
+        content.innerHTML = `
+          <div class="flex flex-wrap gap-3 py-4">
+            ${question.options
+              .map(
+                (opt, i) => `
+              <label class="text-sm font-medium leading-normal flex items-center justify-center rounded-lg border border-slate-300 px-4 h-11 text-slate-700 has-[:checked]:border-[2px] has-[:checked]:px-3.5 has-[:checked]:border-primary has-[:checked]:bg-primary/10 relative cursor-pointer transition-all duration-200">
+                ${opt}
+                <input
+                  class="invisible absolute"
+                  type="radio"
+                  name="q${currentQuestion}"
+                  value="${i + 1}"
+                  ${answers[currentQuestion] == i + 1 ? "checked" : ""}
+                />
+              </label>
+            `
+              )
+              .join("")}
+          </div>
+        `;
+      } else if (question.type === "textarea") {
+        const placeholderText =
+          currentLanguage === "en"
+            ? "Type your feedback here..."
+            : "Geri bildiriminizi buraya yazın...";
+        content.innerHTML = `
+          <textarea
+            name="q${currentQuestion}"
+            class="mt-2 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-slate-700 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+            rows="5"
+            placeholder="${placeholderText}"
+          >${answers[currentQuestion] || ""}</textarea>
+        `;
+      }
+
+      const prevBtn = document.getElementById("prevBtn");
+      if (prevBtn) prevBtn.disabled = currentQuestion === 0;
+    }
+
+    function updateProgress() {
+      const t = translations[currentLanguage];
+      const total = t.questions.length;
+      const percent = Math.round(((currentQuestion + 1) / total) * 100);
+
+      const progressText = document.getElementById("progressText");
+      const progressBar = document.getElementById("progressBar");
+
+      if (progressText)
+        progressText.textContent = percent + "% " + t.progressComplete;
+      if (progressBar) progressBar.style.width = percent + "%";
+    }
+
+    function saveAnswer() {
+      const radio = document.querySelector(
+        `input[name="q${currentQuestion}"]:checked`
+      );
+      const textarea = document.querySelector(
+        `textarea[name="q${currentQuestion}"]`
+      );
+
+      if (radio) {
+        answers[currentQuestion] = radio.value;
+      } else if (textarea) {
+        answers[currentQuestion] = textarea.value;
+      }
+    }
+
+    // Event listeners
+    document.getElementById("langBtnEn").addEventListener("click", () => {
+      setLanguage("en");
+    });
+
+    document.getElementById("langBtnTr").addEventListener("click", () => {
+      setLanguage("tr");
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      saveAnswer();
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        updateUI();
+      }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      saveAnswer();
+      const t = translations[currentLanguage];
+      if (currentQuestion < t.questions.length - 1) {
+        currentQuestion++;
+        updateUI();
+      } else {
+        alert(
+          currentLanguage === "en"
+            ? "Survey submitted! Answers: " + JSON.stringify(answers)
+            : "Anket gönderildi! Yanıtlar: " + JSON.stringify(answers)
+        );
+      }
+    });
+
+    // İlk yüklemede
+    setLanguage("en");
+  </script>
+</body>
+</html>
