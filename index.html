@@ -1,660 +1,431 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>SurveyApp - Müşteri Memnuniyeti Anketi</title>
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-  <!-- Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet"
-  />
-
-  <style type="text/tailwindcss">
-    .material-symbols-outlined {
-      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-    }
-    .page-section {
-      display: none;
-    }
-    .page-section.active {
-      display: block;
-    }
-  </style>
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            primary: "#137fec",
-            "background-light": "#f6f7f8",
-            "background-dark": "#101922",
-          },
-          fontFamily: {
-            display: ["Inter", "sans-serif"],
-          },
-          borderRadius: {
-            DEFAULT: "0.25rem",
-            lg: "0.5rem",
-            xl: "0.75rem",
-            full: "9999px",
-          },
-        },
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SurveyApp - Müşteri Memnuniyeti Anketi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+.page-section {
+  display: none;
+}
+.page-section.active {
+  display: block;
+}
+</style>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#137fec",
+        "background-light": "#f6f7f8",
+        "background-dark": "#101922",
       },
-    };
-  </script>
+      fontFamily: {
+        "display": ["Inter", "sans-serif"]
+      },
+      borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+    },
+  },
+}
+</script>
 </head>
-<body
-  class="font-display bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200"
->
-  <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
-    <div class="layout-container flex h-full grow flex-col">
-      <div class="flex flex-1 justify-center py-5">
-        <div
-          class="layout-content-container flex flex-col w-full max-w-5xl flex-1 px-4 sm:px-6 lg:px-8"
-        >
-          <!-- TopNavBar -->
-          <header
-            class="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-slate-800 px-4 py-4"
-          >
-            <div class="flex items-center gap-3 text-slate-900 dark:text-slate-50">
-              <div class="size-6 text-primary">
-                <svg
-                  fill="none"
-                  viewBox="0 0 48 48"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_6_319)">
-                    <path
-                      d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
-                      fill="currentColor"
-                    ></path>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_6_319">
-                      <rect fill="white" height="48" width="48"></rect>
-                    </clipPath>
-                  </defs>
-                </svg>
-              </div>
-              <h2
-                class="text-lg font-bold tracking-tight cursor-pointer"
-                onclick="showPage('home')"
-              >
-                SurveyApp
-              </h2>
-            </div>
-            <nav class="hidden md:flex items-center gap-8">
-              <button
-                onclick="showPage('about')"
-                class="text-sm font-medium hover:text-primary dark:hover:text-primary transition"
-              >
-                <span class="en-text">About</span>
-                <span class="tr-text hidden">Hakkında</span>
-              </button>
-              <button
-                onclick="showPage('contact')"
-                class="text-sm font-medium hover:text-primary dark:hover:text-primary transition"
-              >
-                <span class="en-text">Contact</span>
-                <span class="tr-text hidden">İletişim</span>
-              </button>
-              <button
-                onclick="toggleLanguage()"
-                class="text-sm font-medium px-3 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition font-bold"
-              >
-                <span class="en-text">TR</span>
-                <span class="tr-text hidden">EN</span>
-              </button>
-            </nav>
-          </header>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col w-full max-w-5xl flex-1 px-4 sm:px-6 lg:px-8">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-slate-800 px-4 py-4">
+<div class="flex items-center gap-3 text-slate-900 dark:text-slate-50">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_319)">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+</g>
+<defs><clippath id="clip0_6_319"><rect fill="white" height="48" width="48"></rect></clippath></defs>
+</svg>
+</div>
+<h2 class="text-lg font-bold tracking-tight cursor-pointer" onclick="showPage('home')">SurveyApp</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<button onclick="showPage('about')" class="text-sm font-medium hover:text-primary dark:hover:text-primary transition">
+<span class="en-text">About</span>
+<span class="tr-text hidden">Hakkında</span>
+</button>
+<button onclick="showPage('contact')" class="text-sm font-medium hover:text-primary dark:hover:text-primary transition">
+<span class="en-text">Contact</span>
+<span class="tr-text hidden">İletişim</span>
+</button>
+<button onclick="toggleLanguage()" class="text-sm font-medium px-3 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition font-bold">
+<span class="en-text">TR</span>
+<span class="tr-text hidden">EN</span>
+</button>
+</nav>
+</header>
+<main>
+<!-- HeroSection -->
+<section class="py-16 md:py-24 page-section active" id="home">
+<div class="flex flex-col-reverse items-center gap-12 @container md:flex-row">
+<div class="flex flex-col gap-6 text-center md:text-left md:w-1/2">
+<div class="flex flex-col gap-3">
+<h1 class="text-4xl font-black leading-tight tracking-tighter text-slate-900 dark:text-slate-50 @[480px]:text-5xl">
+<span class="en-text">Understand Your Customers Better.</span>
+<span class="tr-text hidden">Müşterilerinizi Daha İyi Anlayın.</span>
+</h1>
+<h2 class="text-base font-normal text-slate-600 dark:text-slate-400 @[480px]:text-lg">
+<span class="en-text">Create and share beautiful surveys in minutes to measure satisfaction and gather crucial feedback.</span>
+<span class="tr-text hidden">Müşteri memnuniyetini ölçmek ve önemli geri bildirimler toplamak için dakikalar içinde güzel anketler oluşturun ve paylaşın.</span>
+</h2>
+</div>
+<button onclick="showPage('survey')" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center self-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 md:self-start">
+<span class="truncate">
+<span class="en-text">Start Your First Survey for Free</span>
+<span class="tr-text hidden">İlk Anketinizi Ücretsiz Başlatın</span>
+</span>
+</button>
+</div>
+<div class="w-full md:w-1/2">
+<div class="aspect-square w-full rounded-xl bg-slate-200 dark:bg-slate-800" data-alt="Abstract gradient background with blue and purple hues.">
+<img alt="People collaborating in a modern office environment" class="h-full w-full object-cover rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmfIhW1vq2wPVN8Vbs9m0jT_jy5JyqgcJX6T2UdL9ptaGH3VyFxtPMdD97YHpcWNSCxIXe0QxbHx72pFgIP_ZcZrAV2SSFaNKk1Nw8LQwKGbD863k7MXwcqLkle9JKbIAfP_vxCeSuYpZQ8PS-H-avHzgwZ2jr5rDICiUGPQp4buJMAiRED3cvU8SZu87HksGWiK_g9szQrJd7amfdjaA58iAA4Cz47FO4suWKRI8fYam1lV-53FwA0gHDdMOdd8ePo5Bxmo_0xbs"/>
+</div>
+</div>
+</div>
+</section>
+<!-- FeatureSection -->
+<section class="py-16 md:py-24 page-section active" id="home">
+<div class="flex flex-col gap-10 @container">
+<div class="flex flex-col gap-4 text-center">
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 @[480px]:text-4xl">
+<span class="en-text">Simple &amp; Powerful</span>
+<span class="tr-text hidden">Basit &amp; Güçlü</span>
+</h2>
+<p class="text-base font-normal text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+<span class="en-text">Discover how our platform simplifies the process of gathering and analyzing customer feedback.</span>
+<span class="tr-text hidden">Platformumuzun müşteri geri bildirimini toplama ve analiz etme sürecini nasıl basitleştirdiğini keşfedin.</span>
+</p>
+</div>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+<div class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center items-center">
+<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined">edit_square</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-50">
+<span class="en-text">Effortless Creation</span>
+<span class="tr-text hidden">Kolay Oluşturma</span>
+</h3>
+<p class="text-sm font-normal text-slate-600 dark:text-slate-400">
+<span class="en-text">Build professional surveys in minutes with our intuitive, drag-and-drop survey builder.</span>
+<span class="tr-text hidden">Sezgisel sürükle ve bırak anket oluşturucumuz ile dakikalar içinde profesyonel anketler oluşturun.</span>
+</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center items-center">
+<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined">share</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-50">
+<span class="en-text">Seamless Sharing</span>
+<span class="tr-text hidden">Sorunsuz Paylaşım</span>
+</h3>
+<p class="text-sm font-normal text-slate-600 dark:text-slate-400">
+<span class="en-text">Distribute your surveys easily via a direct link, email, or by embedding them on your website.</span>
+<span class="tr-text hidden">Anketlerinizi doğrudan bağlantı, e-posta veya web sitenize gömerek kolayca dağıtın.</span>
+</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center items-center">
+<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined">bar_chart</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-50">
+<span class="en-text">Clear Insights</span>
+<span class="tr-text hidden">Net Görüşler</span>
+</h3>
+<p class="text-sm font-normal text-slate-600 dark:text-slate-400">
+<span class="en-text">Visualize your results with straightforward charts and analytics to understand feedback at a glance.</span>
+<span class="tr-text hidden">Geri bildirimleri bir bakışta anlamak için basit grafikler ve analitiksyle sonuçlarınızı görselleştirin.</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-16 md:py-24 page-section" id="contact">
+<div class="mx-auto max-w-2xl">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-2 text-center">
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+<span class="en-text">Get In Touch</span>
+<span class="tr-text hidden">İletişime Geçin</span>
+</h2>
+<p class="text-base text-slate-600 dark:text-slate-400">
+<span class="en-text">Have a question or want to learn more? Send us a message.</span>
+<span class="tr-text hidden">Soru var mı yoksa daha fazla bilgi edinmek mi istiyorsunuz? Bize bir mesaj gönderin.</span>
+</p>
+</div>
+<form class="flex flex-col gap-6">
+<div class="flex flex-col gap-4 sm:flex-row">
+<label class="flex flex-col w-full">
+<p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
+<span class="en-text">Name</span>
+<span class="tr-text hidden">Ad</span>
+</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="text"/>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
+<span class="en-text">Email</span>
+<span class="tr-text hidden">E-posta</span>
+</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="email"/>
+</label>
+</div>
+<label class="flex flex-col w-full">
+<p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
+<span class="en-text">Your Message</span>
+<span class="tr-text hidden">Mesajınız</span>
+</p>
+<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary min-h-[120px] placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-base"></textarea>
+</label>
+<button type="button" onclick="submitForm()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 w-full sm:w-auto sm:self-end">
+<span>
+<span class="en-text">Send Message</span>
+<span class="tr-text hidden">Mesajı Gönder</span>
+</span>
+</button>
+</form>
+<button onclick="showPage('home')" class="mt-6 w-full py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+<span class="en-text">← Back to Home</span>
+<span class="tr-text hidden">← Ana Sayfaya Dön</span>
+</button>
+</div>
+</div>
+</section>
 
-          <main>
-            <!-- HeroSection -->
-            <section class="py-16 md:py-24 page-section active" id="home">
-              <div
-                class="flex flex-col-reverse items-center gap-12 @container md:flex-row"
-              >
-                <div class="flex flex-col gap-6 text-center md:text-left md:w-1/2">
-                  <div class="flex flex-col gap-3">
-                    <h1
-                      class="text-4xl font-black leading-tight tracking-tighter text-slate-900 dark:text-slate-50 @[480px]:text-5xl"
-                    >
-                      <span class="en-text">Understand Your Customers Better.</span>
-                      <span class="tr-text hidden">Müşterilerinizi Daha İyi Anlayın.</span>
-                    </h1>
-                    <h2
-                      class="text-base font-normal text-slate-600 dark:text-slate-400 @[480px]:text-lg"
-                    >
-                      <span class="en-text"
-                        >Create and share beautiful surveys in minutes to measure
-                        satisfaction and gather crucial feedback.</span
-                      >
-                      <span class="tr-text hidden"
-                        >Müşteri memnuniyetini ölçmek ve önemli geri bildirimler toplamak
-                        için dakikalar içinde güzel anketler oluşturun ve
-                        paylaşın.</span
-                      >
-                    </h2>
-                  </div>
-                  <button
-                    onclick="showPage('survey')"
-                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center self-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 md:self-start"
-                  >
-                    <span class="truncate">
-                      <span class="en-text">Start Your First Survey for Free</span>
-                      <span class="tr-text hidden">İlk Anketinizi Ücretsiz Başlatın</span>
-                    </span>
-                  </button>
-                </div>
-                <div class="w-full md:w-1/2">
-                  <div
-                    class="aspect-square w-full rounded-xl bg-slate-200 dark:bg-slate-800"
-                    data-alt="Abstract gradient background with blue and purple hues."
-                  >
-                    <img
-                      alt="People collaborating in a modern office environment"
-                      class="h-full w-full object-cover rounded-xl"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmfIhW1vq2wPVN8Vbs9m0jT_jy5JyqgcJX6T2UdL9ptaGH3VyFxtPMdD97YHpcWNSCxIXe0QxbHx72pFgIP_ZcZrAV2SSFaNKk1Nw8LQwKGbD863k7MXwcqLkle9JKbIAfP_vxCeSuYpZQ8PS-H-avHzgwZ2jr5rDICiUGPQp4buJMAiRED3cvU8SZu87HksGWiK_g9szQrJd7amfdjaA58iAA4Cz47FO4suWKRI8fYam1lV-53FwA0gHDdMOdd8ePo5Bxmo_0xbs"
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
+<!-- About Section -->
+<section class="py-16 md:py-24 page-section" id="about">
+<div class="mx-auto max-w-3xl">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-2">
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+<span class="en-text">About SurveyApp</span>
+<span class="tr-text hidden">SurveyApp Hakkında</span>
+</h2>
+<p class="text-base text-slate-600 dark:text-slate-400 mt-4">
+<span class="en-text">SurveyApp is a powerful platform designed to help businesses understand their customers better. Our mission is to make survey creation and distribution simple, intuitive, and accessible to everyone.</span>
+<span class="tr-text hidden">SurveyApp, işletmelerin müşterilerini daha iyi anlamalarına yardımcı olmak için tasarlanmış güçlü bir platformdur. Misyonumuz, anket oluşturma ve dağıtmayı basit, sezgisel ve herkese erişilebilir hale getirmektir.</span>
+</p>
+<p class="text-base text-slate-600 dark:text-slate-400 mt-4">
+<span class="en-text">With our drag-and-drop survey builder, advanced analytics, and seamless distribution options, you can gather valuable customer insights in minutes. Whether you're looking to measure satisfaction, gather feedback, or conduct research, SurveyApp has you covered.</span>
+<span class="tr-text hidden">Sürükle ve bırak anket oluşturucumuz, gelişmiş analitiği ve sorunsuz dağıtım seçeneklerimizle dakikalar içinde değerli müşteri içgörüleri toplayabilirsiniz. Memnuniyeti ölçmek, geri bildirim toplamak veya araştırma yapmak istiyorsanız, SurveyApp sizin için burada.</span>
+</p>
+</div>
+<button onclick="showPage('home')" class="mt-6 w-full py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+<span class="en-text">← Back to Home</span>
+<span class="tr-text hidden">← Ana Sayfaya Dön</span>
+</button>
+</div>
+</div>
+</section>
 
-            <!-- FeatureSection -->
-            <section class="py-16 md:py-24 page-section active" id="index">
-              <div class="flex flex-col gap-10 @container">
-                <div class="flex flex-col gap-4 text-center">
-                  <h2
-                    class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 @[480px]:text-4xl"
-                  >
-                    <span class="en-text">Simple &amp; Powerful</span>
-                    <span class="tr-text hidden">Basit &amp; Güçlü</span>
-                  </h2>
-                  <p
-                    class="text-base font-normal text-slate-600 dark:text-slate-400 max-w-3xl mx-auto"
-                  >
-                    <span class="en-text"
-                      >Discover how our platform simplifies the process of gathering and
-                      analyzing customer feedback.</span
-                    >
-                    <span class="tr-text hidden"
-                      >Platformumuzun müşteri geri bildirimini toplama ve analiz etme
-                      sürecini nasıl basitleştirdiğini keşfedin.</span
-                    >
-                  </p>
-                </div>
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  <div
-                    class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center items-center"
-                  >
-                    <div
-                      class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary"
-                    >
-                      <span class="material-symbols-outlined">edit_square</span>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                      <h3
-                        class="text-lg font-bold text-slate-900 dark:text-slate-50"
-                      >
-                        <span class="en-text">Effortless Creation</span>
-                        <span class="tr-text hidden">Kolay Oluşturma</span>
-                      </h3>
-                      <p
-                        class="text-sm font-normal text-slate-600 dark:text-slate-400"
-                      >
-                        <span class="en-text"
-                          >Build professional surveys in minutes with our intuitive,
-                          drag-and-drop survey builder.</span
-                        >
-                        <span class="tr-text hidden"
-                          >Sezgisel sürükle ve bırak anket oluşturucumuz ile dakikalar
-                          içinde profesyonel anketler oluşturun.</span
-                        >
-                      </p>
-                    </div>
-                  </div>
+<!-- Survey Section -->
+<section class="py-16 md:py-24 page-section" id="survey">
+<div class="mx-auto max-w-2xl">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-2 text-center">
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+<span class="en-text">Customer Satisfaction Survey</span>
+<span class="tr-text hidden">Müşteri Memnuniyeti Anketi</span>
+</h2>
+<p class="text-base text-slate-600 dark:text-slate-400">
+<span class="en-text">Please take a moment to share your feedback with us. Your opinions matter!</span>
+<span class="tr-text hidden">Lütfen bize geri bildiriminizi paylaşmak için bir dakika ayırın. Görüşleriniz önemlidir!</span>
+</p>
+</div>
 
-                  <div
-                    class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center items-center"
-                  >
-                    <div
-                      class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary"
-                    >
-                      <span class="material-symbols-outlined">share</span>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                      <h3
-                        class="text-lg font-bold text-slate-900 dark:text-slate-50"
-                      >
-                        <span class="en-text">Seamless Sharing</span>
-                        <span class="tr-text hidden">Sorunsuz Paylaşım</span>
-                      </h3>
-                      <p
-                        class="text-sm font-normal text-slate-600 dark:text-slate-400"
-                      >
-                        <span class="en-text"
-                          >Distribute your surveys easily via a direct link, email, or by
-                          embedding them on your website.</span
-                        >
-                        <span class="tr-text hidden"
-                          >Anketlerinizi doğrudan bağlantı, e-posta veya web sitenize
-                          gömerek kolayca dağıtın.</span
-                        >
-                      </p>
-                    </div>
-                  </div>
+<form class="flex flex-col gap-6">
+<div class="flex flex-col gap-4">
+<label class="flex flex-col w-full">
+<p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
+<span class="en-text">Full Name</span>
+<span class="tr-text hidden">Tam Ad</span>
+</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="text"/>
+</label>
 
-                  <div
-                    class="flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-center items-center"
-                  >
-                    <div
-                      class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary"
-                    >
-                      <span class="material-symbols-outlined">bar_chart</span>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                      <h3
-                        class="text-lg font-bold text-slate-900 dark:text-slate-50"
-                      >
-                        <span class="en-text">Clear Insights</span>
-                        <span class="tr-text hidden">Net Görüşler</span>
-                      </h3>
-                      <p
-                        class="text-sm font-normal text-slate-600 dark:text-slate-400"
-                      >
-                        <span class="en-text"
-                          >Visualize your results with straightforward charts and
-                          analytics to understand feedback at a glance.</span
-                        >
-                        <span class="tr-text hidden"
-                          >Geri bildirimleri bir bakışta anlamak için basit grafikler ve
-                          analitiksyle sonuçlarınızı görselleştirin.</span
-                        >
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
+<label class="flex flex-col w-full">
+<p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
+<span class="en-text">Email Address</span>
+<span class="tr-text hidden">E-posta Adresi</span>
+</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="email"/>
+</label>
 
-            <!-- Contact Section -->
-            <section class="py-16 md:py-24 page-section" id="contact">
-              <div class="mx-auto max-w-2xl">
-                <div class="flex flex-col gap-8">
-                  <div class="flex flex-col gap-2 text-center">
-                    <h2
-                      class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50"
-                    >
-                      <span class="en-text">Get In Touch</span>
-                      <span class="tr-text hidden">İletişime Geçin</span>
-                    </h2>
-                    <p class="text-base text-slate-600 dark:text-slate-400">
-                      <span class="en-text"
-                        >Have a question or want to learn more? Send us a message.</span
-                      >
-                      <span class="tr-text hidden"
-                        >Soru var mı yoksa daha fazla bilgi edinmek mi istiyorsunuz? Bize
-                        bir mesaj gönderin.</span
-                      >
-                    </p>
-                  </div>
+<label class="flex flex-col w-full">
+<p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
+<span class="en-text">How satisfied are you with our service?</span>
+<span class="tr-text hidden">Hizmetimizden ne kadar memnunsunuz?</span>
+</p>
+<select id="satisfaction-dropdown" class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base">
+<option value="" data-en="Select..." data-tr="Seçin...">Select...</option>
+<option value="very_satisfied" data-en="Very Satisfied" data-tr="Çok Memnunum">Very Satisfied</option>
+<option value="satisfied" data-en="Satisfied" data-tr="Memnunum">Satisfied</option>
+<option value="neutral" data-en="Neutral" data-tr="Tarafsız">Neutral</option>
+<option value="unsatisfied" data-en="Unsatisfied" data-tr="Memnun Değilim">Unsatisfied</option>
+</select>
+</label>
 
-                  <form class="flex flex-col gap-6">
-                    <div class="flex flex-col gap-4 sm:flex-row">
-                      <label class="flex flex-col w-full">
-                        <p
-                          class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200"
-                        >
-                          <span class="en-text">Name</span>
-                          <span class="tr-text hidden">Ad</span>
-                        </p>
-                        <input
-                          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base"
-                          type="text"
-                        />
-                      </label>
+<label class="flex flex-col w-full">
+<p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
+<span class="en-text">Additional Comments</span>
+<span class="tr-text hidden">Ek Yorumlar</span>
+</p>
+<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary min-h-[120px] placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-base"></textarea>
+</label>
 
-                      <label class="flex flex-col w-full">
-                        <p
-                          class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200"
-                        >
-                          <span class="en-text">Email</span>
-                          <span class="tr-text hidden">E-posta</span>
-                        </p>
-                        <input
-                          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base"
-                          type="email"
-                        />
-                      </label>
-                    </div>
+<button type="button" onclick="submitSurvey()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 w-full">
+<span>
+<span class="en-text">Submit Survey</span>
+<span class="tr-text hidden">Anketi Gönder</span>
+</span>
+</button>
+</form>
 
-                    <label class="flex flex-col w-full">
-                      <p
-                        class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200"
-                      >
-                        <span class="en-text">Your Message</span>
-                        <span class="tr-text hidden">Mesajınız</span>
-                      </p>
-                      <textarea
-                        class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary min-h-[120px] placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-base"
-                      ></textarea>
-                    </label>
-
-                    <button
-                      type="button"
-                      onclick="submitForm()"
-                      class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 w-full sm:w-auto sm:self-end"
-                    >
-                      <span>
-                        <span class="en-text">Send Message</span>
-                        <span class="tr-text hidden">Mesajı Gönder</span>
-                      </span>
-                    </button>
-                  </form>
-
-                  <button
-                    onclick="showPage('home')"
-                    class="mt-6 w-full py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition"
-                  >
-                    <span class="en-text">← Back to Home</span>
-                    <span class="tr-text hidden">← Ana Sayfaya Dön</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            <!-- About Section -->
-            <section class="py-16 md:py-24 page-section" id="about">
-              <div class="mx-auto max-w-3xl">
-                <div class="flex flex-col gap-8">
-                  <div class="flex flex-col gap-2">
-                    <h2
-                      class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50"
-                    >
-                      <span class="en-text">About SurveyApp</span>
-                      <span class="tr-text hidden">SurveyApp Hakkında</span>
-                    </h2>
-                    <p
-                      class="text-base text-slate-600 dark:text-slate-400 mt-4"
-                    >
-                      <span class="en-text"
-                        >SurveyApp is a powerful platform designed to help businesses
-                        understand their customers better. Our mission is to make survey
-                        creation and distribution simple, intuitive, and accessible to
-                        everyone.</span
-                      >
-                      <span class="tr-text hidden"
-                        >SurveyApp, işletmelerin müşterilerini daha iyi anlamalarına
-                        yardımcı olmak için tasarlanmış güçlü bir platformdur. Misyonumuz,
-                        anket oluşturma ve dağıtmayı basit, sezgisel ve herkese erişilebilir
-                        hale getirmektir.</span
-                      >
-                    </p>
-                    <p
-                      class="text-base text-slate-600 dark:text-slate-400 mt-4"
-                    >
-                      <span class="en-text"
-                        >With our drag-and-drop survey builder, advanced analytics, and
-                        seamless distribution options, you can gather valuable customer
-                        insights in minutes. Whether you're looking to measure
-                        satisfaction, gather feedback, or conduct research, SurveyApp has
-                        you covered.</span
-                      >
-                      <span class="tr-text hidden"
-                        >Sürükle ve bırak anket oluşturucumuz, gelişmiş analitiği ve
-                        sorunsuz dağıtım seçeneklerimizle dakikalar içinde değerli müşteri
-                        içgörüleri toplayabilirsiniz. Memnuniyeti ölçmek, geri bildirim
-                        toplamak veya araştırma yapmak istiyorsanız, SurveyApp sizin için
-                        burada.</span
-                      >
-                    </p>
-                  </div>
-
-                  <button
-                    onclick="showPage('home')"
-                    class="mt-6 w-full py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition"
-                  >
-                    <span class="en-text">← Back to Home</span>
-                    <span class="tr-text hidden">← Ana Sayfaya Dön</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            <!-- Survey Section -->
-            <section class="py-16 md:py-24 page-section" id="survey">
-              <div class="mx-auto max-w-2xl">
-                <div class="flex flex-col gap-8">
-                  <div class="flex flex-col gap-2 text-center">
-                    <h2
-                      class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50"
-                    >
-                      <span class="en-text">Customer Satisfaction Survey</span>
-                      <span class="tr-text hidden">Müşteri Memnuniyeti Anketi</span>
-                    </h2>
-                    <p class="text-base text-slate-600 dark:text-slate-400">
-                      <span class="en-text"
-                        >Please take a moment to share your feedback with us. Your opinions
-                        matter!</span
-                      >
-                      <span class="tr-text hidden"
-                        >Lütfen bize geri bildiriminizi paylaşmak için bir dakika ayırın.
-                        Görüşleriniz önemlidir!</span
-                      >
-                    </p>
-                  </div>
-
-                  <form class="flex flex-col gap-6">
-                    <div class="flex flex-col gap-4">
-                      <label class="flex flex-col w-full">
-                        <p
-                          class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200"
-                        >
-                          <span class="en-text">Full Name</span>
-                          <span class="tr-text hidden">Tam Ad</span>
-                        </p>
-                        <input
-                          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base"
-                          type="text"
-                        />
-                      </label>
-
-                      <label class="flex flex-col w-full">
-                        <p
-                          class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200"
-                        >
-                          <span class="en-text">Email Address</span>
-                          <span class="tr-text hidden">E-posta Adresi</span>
-                        </p>
-                        <input
-                          class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base"
-                          type="email"
-                        />
-                      </label>
-
-                      <label class="flex flex-col w-full">
-                        <p
-                          class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200"
-                        >
-                          <span class="en-text"
-                            >How satisfied are you with our service?</span
-                          >
-                          <span class="tr-text hidden"
-                            >Hizmetimizden ne kadar memnunsunuz?</span
-                          >
-                        </p>
-                        <select
-                          class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base"
-                        >
-                          <option value="">Select...</option>
-                          <option value="very_satisfied">Very Satisfied</option>
-                          <option value="satisfied">Satisfied</option>
-                          <option value="neutral">Neutral</option>
-                          <option value="unsatisfied">Unsatisfied</option>
-                        </select>
-                      </label>
-
-                      <label class="flex flex-col w-full">
-                        <p
-                          class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200"
-                        >
-                          <span class="en-text">Additional Comments</span>
-                          <span class="tr-text hidden">Ek Yorumlar</span>
-                        </p>
-                        <textarea
-                          class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary min-h-[120px] placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-base"
-                        ></textarea>
-                      </label>
-
-                      <button
-                        type="button"
-                        onclick="submitSurvey()"
-                        class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 w-full"
-                      >
-                        <span>
-                          <span class="en-text">Submit Survey</span>
-                          <span class="tr-text hidden">Anketi Gönder</span>
-                        </span>
-                      </button>
-                    </div>
-                  </form>
-
-                  <button
-                    onclick="showPage('home')"
-                    class="mt-6 w-full py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition"
-                  >
-                    <span class="en-text">← Back to Home</span>
-                    <span class="tr-text hidden">← Ana Sayfaya Dön</span>
-                  </button>
-                </div>
-              </div>
-            </section>
-          </main>
-
-          <!-- Footer -->
-          <footer
-            class="py-8 border-t border-slate-200 dark:border-slate-800"
-          >
-            <div
-              class="flex flex-col items-center justify-between gap-4 sm:flex-row"
-            >
-              <p class="text-sm text-slate-500 dark:text-slate-400">
-                ©️ 2024 SurveyApp.
-                <span class="en-text">All rights reserved.</span>
-                <span class="tr-text hidden">Tüm hakları saklıdır.</span>
-              </p>
-              <div class="flex items-center gap-4">
-                <a
-                  class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary"
-                  href="#"
-                >
-                  <span class="en-text">Privacy Policy</span>
-                  <span class="tr-text hidden">Gizlilik Politikası</span>
-                </a>
-                <a
-                  class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary"
-                  href="#"
-                >
-                  <span class="en-text">Terms of Service</span>
-                  <span class="tr-text hidden">Hizmet Şartları</span>
-                </a>
-              </div>
-            </div>
-          </footer>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Language state
-    let currentLanguage = "en";
-
-    // Show specific page
-    function showPage(pageName) {
-      // Hide all pages
-      const allSections = document.querySelectorAll(".page-section");
-      allSections.forEach((section) => {
-        section.classList.remove("active");
-      });
-
-      // Show selected page(s)
-      if (pageName === "home") {
-        // For home, show all home pages
-        const homePages = document.querySelectorAll("#home");
-        homePages.forEach((page) => page.classList.add("active"));
-      } else {
-        const targetPage = document.getElementById(pageName);
-        if (targetPage) {
-          targetPage.classList.add("active");
-        }
-      }
-
-      // Scroll to top
-      window.scrollTo(0, 0);
-    }
-
-    // Toggle language
-    function toggleLanguage() {
-      if (currentLanguage === "en") {
-        currentLanguage = "tr";
-      } else {
-        currentLanguage = "en";
-      }
-      updateLanguage();
-    }
-
-    // Update all language elements
-    function updateLanguage() {
-      const enTexts = document.querySelectorAll(".en-text");
-      const trTexts = document.querySelectorAll(".tr-text");
-
-      if (currentLanguage === "en") {
-        enTexts.forEach((el) => el.classList.remove("hidden"));
-        trTexts.forEach((el) => el.classList.add("hidden"));
-      } else {
-        enTexts.forEach((el) => el.classList.add("hidden"));
-        trTexts.forEach((el) => el.classList.remove("hidden"));
-      }
-    }
-
-    // Submit survey
-    function submitSurvey() {
-      alert(
-        currentLanguage === "en"
-          ? "Thank you for completing the survey!"
-          : "Anketi tamamladığınız için teşekkür ederiz!"
-      );
-      showPage("home");
-    }
-
-    // Submit form
-    function submitForm() {
-      alert(
-        currentLanguage === "en"
-          ? "Thank you for your message!"
-          : "Mesajınız için teşekkür ederiz!"
-      );
-      showPage("home");
-    }
-
-    // Initialize
-    document.addEventListener("DOMContentLoaded", function () {
-      updateLanguage();
-      showPage("home");
-    });
-  </script>
+<button onclick="showPage('home')" class="mt-6 w-full py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+<span class="en-text">← Back to Home</span>
+<span class="tr-text hidden">← Ana Sayfaya Dön</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="py-8 border-t border-slate-200 dark:border-slate-800">
+<div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+<p class="text-sm text-slate-500 dark:text-slate-400">©️ 2024 SurveyApp. 
+<span class="en-text">All rights reserved.</span>
+<span class="tr-text hidden">Tüm hakları saklıdır.</span>
+</p>
+<div class="flex items-center gap-4">
+<a class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary" href="#">
+<span class="en-text">Privacy Policy</span>
+<span class="tr-text hidden">Gizlilik Politikası</span>
+</a>
+<a class="text-sm text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary" href="#">
+<span class="en-text">Terms of Service</span>
+<span class="tr-text hidden">Hizmet Şartları</span>
+</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+</div>
 </body>
+
+<script>
+// Language state
+let currentLanguage = 'en';
+
+// Show specific page
+function showPage(pageName) {
+  // Hide all pages
+  const allSections = document.querySelectorAll('.page-section');
+  allSections.forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Show selected page(s)
+  if (pageName === 'home') {
+    // For home, show all home pages
+    const homePages = document.querySelectorAll('#home');
+    homePages.forEach(page => page.classList.add('active'));
+  } else {
+    const targetPage = document.getElementById(pageName);
+    if (targetPage) {
+      targetPage.classList.add('active');
+    }
+  }
+  
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
+
+// Toggle language
+function toggleLanguage() {
+  if (currentLanguage === 'en') {
+    currentLanguage = 'tr';
+  } else {
+    currentLanguage = 'en';
+  }
+  
+  updateLanguage();
+}
+
+// Update all language elements
+function updateLanguage() {
+  const enTexts = document.querySelectorAll('.en-text');
+  const trTexts = document.querySelectorAll('.tr-text');
+  
+  if (currentLanguage === 'en') {
+    enTexts.forEach(el => el.classList.remove('hidden'));
+    trTexts.forEach(el => el.classList.add('hidden'));
+  } else {
+    enTexts.forEach(el => el.classList.add('hidden'));
+    trTexts.forEach(el => el.classList.remove('hidden'));
+  }
+  
+  // Update dropdown option text based on language
+  const satisfactionDropdown = document.getElementById('satisfaction-dropdown');
+  if (satisfactionDropdown) {
+    const options = satisfactionDropdown.querySelectorAll('option');
+    options.forEach(option => {
+      const enText = option.getAttribute('data-en');
+      const trText = option.getAttribute('data-tr');
+      if (currentLanguage === 'en' && enText) {
+        option.textContent = enText;
+      } else if (currentLanguage === 'tr' && trText) {
+        option.textContent = trText;
+      }
+    });
+  }
+}
+
+// Submit survey
+function submitSurvey() {
+  // Redirect to thank you page
+  window.location.href = 'tesekkur.html';
+}
+
+// Submit form
+function submitForm() {
+  // Redirect to thank you page
+  window.location.href = 'tesekkur.html';
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  updateLanguage();
+  showPage('home');
+});
+</script>
+
 </html>

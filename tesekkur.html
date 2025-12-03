@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thank You - SurveyApp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 48
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#4A90E2",
+              "accent": "#50E3C2",
+              "background-light": "#F8F9FA",
+              "background-dark": "#101922",
+              "text-light": "#333333",
+              "text-dark": "#E5E7EB"
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+  <!-- Centered header: logo + title properly aligned and nav below -->
+  <header class="w-full border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col items-center gap-4">
+      <!-- Logo and title centered, vertically aligned -->
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="size-6 text-primary flex items-center justify-center">
+          <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+            <g clip-path="url(#clip0_6_319)">
+              <path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+            </g>
+            <defs><clippath id="clip0_6_319"><rect fill="white" height="48" width="48"></rect></clippath></defs>
+          </svg>
+        </div>
+        <span class="text-lg font-bold tracking-tight leading-none">SurveyApp</span>
+      </a>
+
+      <!-- Navigation centered below logo+title -->
+      <nav class="flex items-center gap-6">
+        <a href="index.html#about" class="text-sm font-medium hover:text-primary dark:hover:text-primary transition">
+          <span class="en-text">About</span>
+          <span class="tr-text hidden">Hakkında</span>
+        </a>
+        <a href="index.html#contact" class="text-sm font-medium hover:text-primary dark:hover:text-primary transition">
+          <span class="en-text">Contact</span>
+          <span class="tr-text hidden">İletişim</span>
+        </a>
+        <button onclick="toggleLanguage()" class="text-sm font-medium px-3 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition font-bold">
+          <span class="en-text">TR</span>
+          <span class="tr-text hidden">EN</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+<main class="flex flex-1 items-center justify-center px-4 py-12 sm:py-24">
+<div class="layout-content-container flex w-full max-w-lg flex-col items-center">
+<div class="flex w-full flex-col items-center gap-6 rounded-xl bg-white dark:bg-slate-800/50 p-8 text-center shadow-lg sm:p-12">
+<div class="flex h-20 w-20 items-center justify-center rounded-full bg-accent/20 text-accent">
+<span class="material-symbols-outlined !text-5xl">check_circle</span>
+</div>
+<div class="flex flex-col gap-2">
+<h1 class="text-text-light dark:text-text-dark text-4xl font-bold tracking-tight">
+  <span class="en-text">Thank you!</span>
+  <span class="tr-text hidden">Teşekkür ederiz!</span>
+</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed">
+  <span class="en-text">Your feedback is valuable to us and will help us improve.</span>
+  <span class="tr-text hidden">Geri bildiriminiz bizim için değerlidir ve geliştirmemize yardımcı olacaktır.</span>
+</p>
+</div>
+<div class="flex w-full justify-center pt-4">
+<a href="index.html" class="flex min-w-[84px] w-full max-w-xs cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] transition-opacity hover:opacity-90">
+  <span class="truncate">
+    <span class="en-text">Return to Homepage</span>
+    <span class="tr-text hidden">Ana Sayfaya Dön</span>
+  </span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<footer class="flex flex-col gap-6 px-5 py-10 text-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">© 2024 SurveyApp Inc. All rights reserved.</p>
+</footer>
+</div>
+</div>
+
+<script>
+  // Language state for this page
+  let currentLanguage = 'en';
+
+  function toggleLanguage() {
+    currentLanguage = currentLanguage === 'en' ? 'tr' : 'en';
+    updateLanguage();
+  }
+
+  function updateLanguage() {
+    const enTexts = document.querySelectorAll('.en-text');
+    const trTexts = document.querySelectorAll('.tr-text');
+    if (currentLanguage === 'en') {
+      enTexts.forEach(el => el.classList.remove('hidden'));
+      trTexts.forEach(el => el.classList.add('hidden'));
+    } else {
+      enTexts.forEach(el => el.classList.add('hidden'));
+      trTexts.forEach(el => el.classList.remove('hidden'));
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    updateLanguage();
+  });
+</script>
+
+</body></html>
