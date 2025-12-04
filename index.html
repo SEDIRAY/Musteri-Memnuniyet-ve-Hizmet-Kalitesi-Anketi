@@ -73,9 +73,26 @@ tailwind.config = {
 <span class="en-text">TR</span>
 <span class="tr-text hidden">EN</span>
 </button>
+<button onclick="window.location.href='adminpaneli.html'" class="text-sm font-medium px-3 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white transition font-bold">
+<span class="en-text hidden">Admin Panel</span>
+<span class="tr-text">Admin Paneli</span>
+</button>
 </nav>
 </header>
 <main>
+<!-- Top Contact Info (inserted) -->
+<section class="py-6 page-section active" id="contact-top">
+  <div class="mx-auto max-w-3xl text-center">
+    <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-50">
+      <span class="en-text">Get In Touch</span>
+      <span class="tr-text hidden">İletişim Hakkında</span>
+    </h3>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">
+      <span class="en-text">Have a question? We'd love to hear from you.</span>
+      <span class="tr-text hidden">Bir sorunuz varsa, bize ulaşmaktan memnuniyet duyarız.</span>
+    </p>
+  </div>
+</section>
 <!-- HeroSection -->
 <section class="py-16 md:py-24 page-section active" id="home">
 <div class="flex flex-col-reverse items-center gap-12 @container md:flex-row">
@@ -316,6 +333,25 @@ tailwind.config = {
 </div>
 </section>
 </main>
+<!-- Admin Section (placeholder) -->
+<section class="py-16 md:py-24 page-section" id="admin">
+  <div class="mx-auto max-w-2xl">
+    <div class="flex flex-col gap-8 text-center">
+      <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
+        <span class="en-text">Admin Panel</span>
+        <span class="tr-text hidden">Admin Paneli</span>
+      </h2>
+      <p class="text-base text-slate-600 dark:text-slate-400">
+        <span class="en-text">This area is reserved for administrators. Login will be added later.</span>
+        <span class="tr-text hidden">Bu alan yöneticiler için ayrılmıştır. Giriş daha sonra eklenecektir.</span>
+      </p>
+      <button onclick="showPage('home')" class="mt-6 w-full sm:w-auto py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+        <span class="en-text">← Back to Home</span>
+        <span class="tr-text hidden">← Ana Sayfaya Dön</span>
+      </button>
+    </div>
+  </div>
+</section>
 <!-- Footer -->
 <footer class="py-8 border-t border-slate-200 dark:border-slate-800">
 <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
