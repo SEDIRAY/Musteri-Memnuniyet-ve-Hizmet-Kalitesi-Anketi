@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin: Survey Results Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+            },
+            fontFamily: {
+              "display": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<div class="flex flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark p-4 w-64 shrink-0">
+<div class="flex flex-col h-full justify-between">
+<div class="flex flex-col gap-4">
+<div class="flex gap-3 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Admin user avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCaY0mkYEx8Key_IW_qpVC4UHJccftzOZX6n9j2lvOqJTNDYrC5gko7Xq6OYI218-Tke3eWafa6F6x1qeKiolm2GguaLr3NCr6kqUlAykZqAKTQEU53RolQdvzJD-JqWIi8e5s4zUq7tE3PAdy79al71hauoExbUVgDthLA4lU01XYN5fBgHZ0v1e4q480sldVqFMvSyEKvxts2bnkDW6eu4CEkmuPX6rLTOnwlSUN93InfNgNy-hp0_7GLDvdxf60Tr4hTj_dfRWg");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-200 text-base font-medium leading-normal">Admin Panel</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Survey Management</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20" href="pastagrafiksayfasi.html">
+<span class="material-symbols-outlined text-primary text-2xl">monitoring</span>
+<p class="text-primary text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" href="Musteri-Memnuniyet-ve-Hizmet-Kalitesi-Anketi/index.html">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300 text-2xl">quiz</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Surveys</p>
+</a>
+<!-- Reports and Settings buttons removed per request -->
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" href="adminpaneli.html">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300 text-2xl">logout</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Logout</p>
+</a>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-1 p-8">
+<div class="layout-content-container flex flex-col max-w-4xl mx-auto">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between gap-3 p-4">
+<p class="text-slate-900 dark:text-slate-50 text-4xl font-black leading-tight tracking-[-0.033em]">Anket Sonuçları</p>
+</div>
+<div class="flex flex-col gap-6 mt-6">
+<!-- Chart -->
+<div class="flex flex-col gap-4 p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-slate-900 dark:text-slate-200 text-lg font-medium leading-normal">Hizmet kalitesini nasıl değerlendirirsiniz?</p>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Live Update</p>
+</div>
+</div>
+</div>
+<div class="relative h-96 w-full flex justify-center items-center">
+<canvas id="surveyPieChart"></canvas>
+</div>
+</div>
+<!-- Stats -->
+<div class="flex flex-wrap gap-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+<p class="text-slate-600 dark:text-slate-300 text-base font-medium leading-normal">Toplam Katılımcı Sayısı</p>
+<p class="text-slate-900 dark:text-slate-50 tracking-light text-4xl font-bold leading-tight" id="totalParticipants">152</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<script>
+        const ctx = document.getElementById('surveyPieChart').getContext('2d');
+        const totalParticipantsEl = document.getElementById('totalParticipants');
+
+        const initialData = {
+            labels: ['Kesinlikle katılmıyorum', 'Katılmıyorum', 'Kararsızım', 'Katılıyorum', 'Kesinlikle katılıyorum'],
+            datasets: [{
+                label: 'Responses',
+                data: [50, 60, 10, 22, 10],
+                backgroundColor: [
+                    '#ef4444', // red-500  -> Kesinlikle katılmıyorum
+                    '#f97316', // orange-500 -> Katılmıyorum
+                    '#facc15', // yellow-400 -> Kararsızım
+                    '#22c55e', // green-500 -> Katılıyorum
+                    '#84cc16'  // lime-500  -> Kesinlikle katılıyorum
+                ],
+                borderColor: tailwind.config.theme.extend.colors["background-light"],
+                borderWidth: 3,
+                hoverOffset: 8
+            }]
+        };
+
+        const surveyPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: initialData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569',
+                            font: {
+                                family: 'Inter',
+                                size: 14,
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                         bodyFont: {
+                            family: 'Inter',
+                        },
+                        titleFont: {
+                            family: 'Inter',
+                        },
+                    }
+                }
+            }
+        });
+        
+        function updateTotalParticipants(data) {
+             const total = data.reduce((sum, current) => sum + current, 0);
+             totalParticipantsEl.textContent = total;
+        }
+        
+        updateTotalParticipants(initialData.datasets[0].data);
+
+        // Simulate real-time data update every 3 seconds
+        setInterval(() => {
+            // Generate some random changes for demonstration
+            surveyPieChart.data.datasets.forEach((dataset) => {
+                dataset.data = dataset.data.map(() => Math.floor(Math.random() * 100) + 1);
+            });
+            surveyPieChart.update();
+            updateTotalParticipants(surveyPieChart.data.datasets[0].data);
+        }, 3000);
+    </script>
+</body></html>
