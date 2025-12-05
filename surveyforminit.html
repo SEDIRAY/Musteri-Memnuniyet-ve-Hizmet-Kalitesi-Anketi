@@ -1,14 +1,35 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html class="light" lang="tr">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Müşteri geri bildirim anketi — yaklaşık 3 dakika sürer.">
   <title>Müşteri Memnuniyeti Anketi</title>
-
-  <!-- Tailwind config ÖNCE -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    input[type="checkbox"]:disabled + p {
+      color: #94a3b8;
+    }
+    /* Visible focus styles for keyboard users (fallback for environments without Tailwind focus-visible handling) */
+    :where(button, a, input, select, textarea):focus {
+      outline: 3px solid rgba(19,127,236,0.18);
+      outline-offset: 3px;
+    }
+    /* Small utility for visually-hidden text */
+    .sr-only {
+      position: absolute !important;
+      height: 1px; width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+    }
+  </style>
   <script>
-    tailwind = tailwind || {};
     tailwind.config = {
       darkMode: "class",
       theme: {
@@ -21,45 +42,11 @@
           fontFamily: {
             "display": ["Inter", "sans-serif"]
           },
-          borderRadius: {
-            "DEFAULT": "0.25rem",
-            "lg": "0.5rem",
-            "xl": "0.75rem",
-            "full": "9999px"
-          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
         },
       },
     }
   </script>
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-
-  <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-    input[type="checkbox"]:disabled + p {
-      color: #94a3b8;
-    }
-    /* Visible focus styles for keyboard users (fallback) */
-    :where(button, a, input, select, textarea):focus {
-      outline: 3px solid rgba(19,127,236,0.18);
-      outline-offset: 3px;
-    }
-    /* Visually-hidden text */
-    .sr-only {
-      position: absolute !important;
-      height: 1px; width: 1px;
-      overflow: hidden;
-      clip: rect(1px, 1px, 1px, 1px);
-      white-space: nowrap;
-    }
-  </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-[#0d141b] dark:text-slate-200">
   <div class="relative flex h-auto min-h-screen w-full flex-col items-center justify-center p-4 group/design-root" style='font-family: Inter, "Noto Sans", sans-serif;'>
@@ -74,36 +61,15 @@
         <!-- Language toggle -->
         <div class="w-full flex justify-end mb-2">
           <div role="toolbar" aria-label="Dil seçimi" class="inline-flex rounded-md shadow-sm" id="lang-toolbar">
-            <button
-              id="lang-tr"
-              type="button"
-              class="px-3 py-1 rounded-l-md font-medium focus:outline-none
-                     bg-primary/10 text-primary hover:bg-primary/20"
-              aria-pressed="true"
-            >
-              TR
-            </button>
-            <button
-              id="lang-en"
-              type="button"
-              class="px-3 py-1 rounded-r-md font-medium focus:outline-none
-                     bg-transparent text-slate-600 hover:bg-slate-100"
-              aria-pressed="false"
-            >
-              EN
-            </button>
+            <button id="lang-tr" type="button" class="px-3 py-1 rounded-l-md bg-primary/10 text-primary font-medium hover:bg-primary/20 focus:outline-none" aria-pressed="true">TR</button>
+            <button id="lang-en" type="button" class="px-3 py-1 rounded-r-md bg-transparent text-slate-600 hover:bg-slate-100 focus:outline-none" aria-pressed="false">EN</button>
           </div>
         </div>
 
         <!-- HeadlineText Component -->
-        <h1 id="survey-heading" class="text-[#0d141b] dark:text-white tracking-tight text-2xl sm:text-3xl font-bold leading-tight">
-          Müşteri Memnuniyeti Anketi
-        </h1>
-
-        <!-- BodyText Component -->
-        <p id="intro-text" class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal mt-2">
-          Görüşleriniz bizim için önemli. Lütfen kısa anketi doldurmak için birkaç dakikanızı ayırın.
-        </p>
+  <h1 id="survey-heading" class="text-[#0d141b] dark:text-white tracking-tight text-2xl sm:text-3xl font-bold leading-tight">Müşteri Memnuniyeti Anketi</h1>
+  <!-- BodyText Component -->
+        <p id="intro-text" class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal mt-2">Görüşleriniz bizim için önemli. Lütfen kısa anketi doldurmak için birkaç dakikanızı ayırın.</p>
       </div>
 
       <div class="my-8 space-y-4" role="region" aria-labelledby="survey-heading">
@@ -112,9 +78,7 @@
           <div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 shrink-0 size-10">
             <span class="material-symbols-outlined">lightbulb</span>
           </div>
-          <p id="list-1" class="text-[#0d141b] dark:text-slate-200 text-base font-normal leading-normal flex-1 truncate">
-            Deneyiminizi geliştirmemize yardımcı olun
-          </p>
+          <p id="list-1" class="text-[#0d141b] dark:text-slate-200 text-base font-normal leading-normal flex-1 truncate">Deneyiminizi geliştirmemize yardımcı olun</p>
         </div>
 
         <!-- ListItem Component 2 -->
@@ -122,9 +86,7 @@
           <div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 shrink-0 size-10">
             <span class="material-symbols-outlined">timer</span>
           </div>
-          <p id="list-2" class="text-[#0d141b] dark:text-slate-200 text-base font-normal leading-normal flex-1 truncate">
-            Yaklaşık 3 dakika sürer
-          </p>
+          <p id="list-2" class="text-[#0d141b] dark:text-slate-200 text-base font-normal leading-normal flex-1 truncate">Yaklaşık 3 dakika sürer</p>
         </div>
       </div>
 
@@ -135,32 +97,23 @@
           <div class="px-1">
             <label class="flex gap-x-3 py-3 flex-row items-start cursor-pointer" for="consent-checkbox">
               <input
-                class="h-5 w-5 rounded border-[#cfdbe7] dark:border-slate-600 border-2 bg-transparent text-primary
-                       checked:bg-primary checked:border-primary focus:ring-0 focus:ring-offset-0 focus:border-primary
-                       dark:checked:bg-primary dark:checked:border-primary mt-0.5 shrink-0"
+                class="h-5 w-5 rounded border-[#cfdbe7] dark:border-slate-600 border-2 bg-transparent text-primary checked:bg-primary checked:border-primary focus:ring-0 focus:ring-offset-0 focus:border-primary dark:checked:bg-primary dark:checked:border-primary mt-0.5 shrink-0"
                 id="consent-checkbox"
                 name="consent"
                 type="checkbox"
                 aria-describedby="consent-desc"
                 aria-required="true"
               />
-              <p id="consent-desc" class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
-                KVKK/GDPR politikasının
-                <a class="text-primary hover:underline font-medium" href="#" id="kvkk-link">hüküm ve koşullarını</a>
-                kabul ediyorum.
-              </p>
+              <p id="consent-desc" class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">KVKK/GDPR politikasının <a class="text-primary hover:underline font-medium" href="#" id="kvkk-link">hüküm ve koşullarını</a> kabul ediyorum.</p>
             </label>
           </div>
 
-          <!-- CTA Button -->
+          <!-- CTA Button (New Component) -->
           <div class="mt-4">
             <button
               id="start-btn"
               type="submit"
-              class="w-full bg-primary text-white font-semibold py-3 px-4 rounded-lg hover:bg-primary/90
-                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50
-                     disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed
-                     disabled:text-slate-500 transition-colors duration-200"
+              class="w-full bg-primary text-white font-semibold py-3 px-4 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed disabled:text-slate-500 transition-colors duration-200"
               aria-disabled="true"
               disabled
             >
@@ -217,29 +170,9 @@
 
       let currentMessages = translations.tr;
 
-      function setLangButtonStyles(lang) {
-        if (!els.langTR || !els.langEN) return;
-
-        if (lang === 'tr') {
-          els.langTR.className =
-            'px-3 py-1 rounded-l-md font-medium focus:outline-none bg-primary/10 text-primary hover:bg-primary/20';
-          els.langEN.className =
-            'px-3 py-1 rounded-r-md font-medium focus:outline-none bg-transparent text-slate-600 hover:bg-slate-100';
-        } else {
-          els.langTR.className =
-            'px-3 py-1 rounded-l-md font-medium focus:outline-none bg-transparent text-slate-600 hover:bg-slate-100';
-          els.langEN.className =
-            'px-3 py-1 rounded-r-md font-medium focus:outline-none bg-primary/10 text-primary hover:bg-primary/20';
-        }
-      }
-
       function applyLang(lang) {
         const t = translations[lang] || translations.tr;
-        currentMessages = t;
-
         document.documentElement.lang = lang;
-        document.title = t.title;
-
         if (els.metaDesc) els.metaDesc.setAttribute('content', t.meta);
         if (els.heading) els.heading.textContent = t.title;
         if (els.intro) els.intro.textContent = t.intro;
@@ -247,22 +180,16 @@
         if (els.list2) els.list2.textContent = t.list2;
         if (els.consent) els.consent.innerHTML = t.consent;
         if (els.startBtn) els.startBtn.textContent = t.start;
-
         if (els.langTR && els.langEN) {
           els.langTR.setAttribute('aria-pressed', String(lang === 'tr'));
           els.langEN.setAttribute('aria-pressed', String(lang === 'en'));
-          setLangButtonStyles(lang);
         }
-
+        currentMessages = t;
         localStorage.setItem('surveyLang', lang);
       }
 
       // Initialize language from localStorage or browser
-      const rawStoredLang = localStorage.getItem('surveyLang');
-      const storedLang = (rawStoredLang === 'tr' || rawStoredLang === 'en')
-        ? rawStoredLang
-        : (navigator.language && navigator.language.startsWith('tr') ? 'tr' : 'en');
-
+      const storedLang = localStorage.getItem('surveyLang') || (navigator.language && navigator.language.startsWith('tr') ? 'tr' : 'en');
       applyLang(storedLang);
 
       // Language toggle handlers
@@ -273,7 +200,7 @@
       const { checkbox, startBtn, form } = els;
       if (!form || !checkbox || !startBtn) return;
 
-      // Initialize checkbox from storage
+      // Initialize button state
       const storedConsent = localStorage.getItem('surveyConsent');
       if (storedConsent === 'true') checkbox.checked = true;
 
@@ -294,8 +221,7 @@
         }
         localStorage.setItem('surveyConsent', 'true');
         showTemporaryMessage(currentMessages.startingMsg);
-        // TODO: burada anket sayfasına yönlendirme veya callback çağrısı yapılacak
-        // window.location.href = '/anket';
+        // TODO: navigate to survey page or call callback
       });
 
       function showTemporaryMessage(text) {
