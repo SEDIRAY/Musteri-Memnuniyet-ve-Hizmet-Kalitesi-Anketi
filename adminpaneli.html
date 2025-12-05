@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SurveyApp Admin Login</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+			tailwind.config = {
+				darkMode: "class",
+				theme: {
+					extend: {
+						colors: {
+							"primary": "#4A90E2",
+							"background-light": "#ffffff",
+							"background-dark": "#101922",
+							"form-background-light": "#F4F7F9",
+							"form-background-dark": "#1a2632",
+							"text-light": "#333333",
+							"text-dark": "#e0e0e0",
+							"text-muted-light": "#666666",
+							"text-muted-dark": "#a0a0a0",
+							"border-light": "#cfdbe7",
+							"border-dark": "#4a5568",
+							"error": "#D0021B",
+						},
+						fontFamily: {
+							"display": ["Inter", "sans-serif"]
+						},
+						borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+					},
+				},
+			}
+		</script>
+<style>
+				.material-symbols-outlined {
+						font-variation-settings:
+						'FILL' 0,
+						'wght' 400,
+						'GRAD' 0,
+						'opsz' 24
+				}
+		</style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="absolute top-0 left-0 right-0 z-10 p-6 md:p-8">
+				<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">fact_check</span>
+<p class="text-xl font-bold text-text-light dark:text-text-dark">SurveyApp</p>
+</div>
+</header>
+<main class="flex min-h-screen flex-1">
+<div class="grid w-full grid-cols-1 md:grid-cols-2">
+<!-- Branding Panel -->
+<div class="relative hidden flex-col justify-center bg-gray-100 p-10 md:flex dark:bg-background-dark">
+<div class="absolute inset-0 bg-primary/10 dark:bg-primary/20"></div>
+<div class="relative z-10 flex max-w-md flex-col gap-6">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-contain" data-alt="Abstract graphic representing data insights and customer feedback charts" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVZyv74h8x-c8Wh65u0AG2ddG55kPkhIlaS0Cx6GWDXahM68cq6rZylPe9CvO8XnqQnQ5x51H8aEa-oAyxKN2s-mf4e0DBBnNDKIfJcyt2WJyl50AUYfjyTkRIVxbn9MRHQHaXGO1aisMK7Z8sraJr6efSd9UDIfkiU5RWIRQ4mxeNe_nE4NDm2JmzaULKfGjXS8lpZozUnSSPUQAKkDwnovfbayH1lqjKSC7Z6OTc9562D0iC9t1kBMxwpushOfOpzN-Ew5uHAyc');"></div>
+<div class="flex flex-col gap-2 text-left">
+<h1 id="branding-heading" class="text-text-light dark:text-text-dark text-4xl font-black leading-tight tracking-[-0.033em]">Unlock Insights. Drive Growth.</h1>
+<h2 id="branding-subtitle" class="text-text-muted-light dark:text-text-muted-dark text-base font-normal leading-normal">Welcome to the SurveySphere Admin Portal. Please sign in to continue.</h2>
+</div>
+</div>
+</div>
+<!-- Login Form Panel -->
+<div class="flex w-full items-center justify-center bg-form-background-light p-6 dark:bg-form-background-dark sm:p-12">
+<div id="login-panel" class="flex w-full max-w-md flex-col gap-8">
+<!-- Page Heading -->
+<div class="flex flex-col gap-2">
+	<div class="w-full flex justify-end mb-2">
+		<div role="toolbar" aria-label="Language selector" class="inline-flex rounded-md shadow-sm" id="lang-toolbar">
+			<button id="lang-en" type="button" class="px-3 py-1 rounded-l-md bg-primary/10 text-primary font-medium hover:bg-primary/20 focus:outline-none" aria-pressed="true">EN</button>
+			<button id="lang-tr" type="button" class="px-3 py-1 rounded-r-md bg-transparent text-slate-600 hover:bg-slate-100 focus:outline-none" aria-pressed="false">TR</button>
+		</div>
+	</div>
+	<p id="page-heading" class="text-text-light dark:text-text-dark text-4xl font-black leading-tight tracking-[-0.033em]">Admin Portal Login</p>
+	<p id="page-subtitle" class="text-text-muted-light dark:text-text-muted-dark text-base font-normal leading-normal">Please enter your credentials to access the dashboard.</p>
+</div>
+<!-- Form -->
+<div class="flex flex-col gap-6">
+<!-- Email Field -->
+<label class="flex flex-col min-w-40 flex-1">
+<p id="label-email" class="text-text-light dark:text-text-dark text-base font-medium leading-normal pb-2">Email Address</p>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<div class="flex items-center justify-center rounded-l-lg border border-r-0 border-border-light bg-background-light pl-4 dark:border-border-dark dark:bg-background-dark">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark text-xl">mail</span>
+</div>
+<input id="input-email" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-l-0 border-border-light bg-background-light focus:border-primary h-14 placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark p-[15px] pr-2 text-base font-normal leading-normal dark:border-border-dark dark:bg-background-dark dark:focus:border-primary" placeholder="you@example.com" type="email" value=""/>
+</div>
+</label>
+<!-- Password Field -->
+<label class="flex flex-col min-w-40 flex-1">
+<p id="label-password" class="text-text-light dark:text-text-dark text-base font-medium leading-normal pb-2">Password</p>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<div class="flex items-center justify-center rounded-l-lg border border-r-0 border-border-light bg-background-light pl-4 dark:border-border-dark dark:bg-background-dark">
+<span class="material-symbols-outlined text-text-muted-light dark:text-text-muted-dark text-xl">lock</span>
+</div>
+<input id="input-password" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light bg-background-light focus:border-primary h-14 placeholder:text-text-muted-light dark:placeholder:text-text-muted-dark p-[15px] pr-2 text-base font-normal leading-normal dark:border-border-dark dark:bg-background-dark dark:focus:border-primary" placeholder="Enter your password" type="password" value=""/>
+<div class="flex items-center justify-center rounded-r-lg border border-l-0 border-border-light bg-background-light pr-4 dark:border-border-dark dark:bg-background-dark">
+<button id="password-toggle" type="button" aria-pressed="false" aria-label="Show password" class="text-text-muted-light dark:text-text-muted-dark">
+	<span id="password-toggle-icon" class="material-symbols-outlined text-xl">visibility_off</span>
+</button>
+</div>
+</div>
+</label>
+<div class="flex flex-wrap items-center justify-between gap-3">
+<!-- Remember Me Checkbox -->
+<label class="flex cursor-pointer items-center gap-x-3">
+<input class="h-5 w-5 rounded border-border-light border-2 bg-transparent text-primary checked:bg-primary checked:border-primary focus:ring-primary/50 focus:ring-offset-0 focus:outline-none dark:border-border-dark" type="checkbox"/>
+<p id="remember-text" class="text-text-light dark:text-text-dark text-sm font-normal leading-normal">Remember Me</p>
+</label>
+<!-- Forgot Password Link -->
+<a id="forgot-text" class="text-sm font-medium text-primary hover:underline" href="#">Forgot Password?</a>
+</div>
+<!-- Error Message -->
+<div id="error-box" class="hidden items-center gap-2 rounded-lg bg-error/10 p-3 text-error">
+<span class="material-symbols-outlined text-lg">error</span>
+<p id="error-text" class="text-sm font-medium">Invalid credentials. Please try again.</p>
+</div>
+<!-- Login Button -->
+<button id="login-btn" class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-form-background-light dark:focus:ring-offset-form-background-dark transition-colors">
+<span id="login-btn-text" class="truncate">Sign In</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<footer class="w-full text-center p-6 text-text-muted-light dark:text-text-muted-dark text-sm">
+	<p id="footer-text">© 2024 SurveyApp. All rights reserved.</p>
+</footer>
+</div>
+
+<!-- Forgot password modal (hidden by default) -->
+<div id="reset-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" aria-hidden="true" role="dialog" aria-modal="true">
+	<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true"></div>
+	<div class="relative z-10 w-full max-w-md rounded-lg bg-background-light p-6 text-text-light shadow-lg dark:bg-background-dark">
+		<div class="flex items-start justify-between gap-4">
+			<div>
+				<h3 class="text-lg font-bold" data-i18n="resetTitle">Reset your password</h3>
+				<p class="mt-2 text-sm text-text-muted-light dark:text-text-muted-dark" data-i18n="resetInstructions">Enter the email for your account and we'll send a reset link.</p>
+			</div>
+			<button id="reset-close-btn" class="ml-2 rounded-md p-1 text-text-muted-light hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Close">✕</button>
+		</div>
+		<div class="mt-4">
+			<label class="sr-only" for="reset-email">Email</label>
+			<input id="reset-email" type="email" class="w-full rounded-lg border border-border-light p-3 text-text-light dark:bg-background-dark dark:border-border-dark" placeholder="you@example.com" />
+		</div>
+		<p id="reset-msg" class="mt-3 hidden text-sm"></p>
+		<div class="mt-4 flex justify-end">
+			<button id="reset-send-btn" class="rounded-lg bg-primary px-4 py-2 text-white">Send reset link</button>
+		</div>
+	</div>
+</div>
+
+	<!-- Results viewer: upload/paste and display summary -->
+	<section id="results-section" class="w-full max-w-4xl mx-auto my-8 px-6 hidden">
+		<div class="rounded-lg border border-border-light bg-background-light p-6 dark:bg-background-dark dark:border-border-dark">
+			<div class="flex items-center justify-between">
+				<h3 id="results-title" class="text-lg font-bold">Survey Results</h3>
+				<div class="flex items-center gap-2">
+					<label class="text-sm text-text-muted-light dark:text-text-muted-dark">File</label>
+					<input id="results-file" type="file" accept=".json,.csv" class="text-sm" />
+				</div>
+			</div>
+			<p id="results-instr" class="mt-3 text-sm text-text-muted-light">Upload a JSON or CSV of survey responses, or paste JSON into the box below.</p>
+
+			<textarea id="results-paste" rows="6" class="mt-3 w-full rounded-md border border-border-light p-3 text-sm dark:bg-background-dark dark:border-border-dark" placeholder='Paste JSON array here (e.g. [{"q1":"Yes","q2":5}, ...])'></textarea>
+			<div class="mt-3 flex items-center gap-3">
+				<button id="results-parse-btn" class="rounded-lg bg-primary px-4 py-2 text-white">Parse & Show</button>
+				<button id="results-toggle-btn" class="rounded-lg bg-transparent border border-border-light px-3 py-2 text-text-light">Show/Hide Panel</button>
+				<button id="results-download-btn" class="ml-auto rounded-lg bg-primary/80 px-3 py-2 text-white hidden">Download Summary</button>
+			</div>
+
+			<div id="results-output" class="mt-4 w-full overflow-x-auto text-sm"></div>
+		</div>
+	</section>
+
+<!-- Bilingual script: EN/TR -->
+<script>
+	(function () {
+		const translations = {
+			en: {
+				showPassword: 'Show password',
+				hidePassword: 'Hide password',
+				resetTitle: 'Reset your password',
+				resetInstructions: 'Enter the email for your account and we\'ll send a reset link.',
+				resetEmailPlaceholder: 'you@example.com',
+				resetSend: 'Send reset link',
+				resetSent: 'Password reset link sent. Check your inbox.',
+				resetInvalidEmail: 'Please enter a valid email address.',
+				resetClose: 'Close',
+				brandingHeading: 'Unlock Insights. Drive Growth.',
+				brandingSubtitle: 'Welcome to the SurveyApp Admin Portal. Please sign in to continue.',
+				pageHeading: 'Admin Portal Login',
+				pageSubtitle: 'Please enter your credentials to access the dashboard.',
+				labelEmail: 'Email Address',
+				placeholderEmail: 'you@example.com',
+				labelPassword: 'Password',
+				placeholderPassword: 'Enter your password',
+				remember: 'Remember Me',
+				forgot: 'Forgot Password?',
+				invalid: 'Invalid credentials. Please try again.',
+				signIn: 'Sign In',
+				footer: '© 2024 SurveyApp. All rights reserved.'
+				,resultsTitle: 'Survey Results'
+				,resultsInstr: 'Upload a JSON or CSV of survey responses, or paste JSON into the box below.'
+				,parseButton: 'Parse & Show'
+				,togglePanel: 'Show/Hide Panel'
+				,downloadSummary: 'Download Summary'
+			},
+			tr: {
+				showPassword: 'Parolayı göster',
+				hidePassword: 'Parolayı gizle',
+				resetTitle: 'Parolanızı sıfırlayın',
+				resetInstructions: 'Hesabınızın e-posta adresini girin; size sıfırlama bağlantısı göndereceğiz.',
+				resetEmailPlaceholder: 'ornek@domain.com',
+				resetSend: 'Sıfırlama bağlantısı gönder',
+				resetSent: 'Parola sıfırlama bağlantısı gönderildi. Gelen kutunuzu kontrol edin.',
+				resetInvalidEmail: 'Lütfen geçerli bir e-posta adresi girin.',
+				resetClose: 'Kapat',
+				brandingHeading: 'Bilgileri Keşfedin. Büyümeyi Yönlendirin.',
+				brandingSubtitle: 'SurveyApp Yönetici Portaline hoş geldiniz. Devam etmek için giriş yapın.',
+				pageHeading: 'Yönetici Girişi',
+				pageSubtitle: 'Kontrol paneline erişmek için kimlik bilgilerinizi girin.',
+				labelEmail: 'E-posta Adresi',
+				placeholderEmail: 'ornek@domain.com',
+				labelPassword: 'Parola',
+				placeholderPassword: 'Parolanızı girin',
+				remember: 'Beni Hatırla',
+				forgot: 'Parolamı Unuttum?',
+				invalid: 'Hatalı kimlik bilgileri. Lütfen tekrar deneyin.',
+				signIn: 'Giriş Yap',
+				footer: '© 2024 SurveyApp. Tüm hakları saklıdır.'
+				,resultsTitle: 'Anket Sonuçları'
+				,resultsInstr: 'Anket yanıtlarının JSON veya CSV dosyasını yükleyin veya JSON\'u aşağıdaki kutuya yapıştırın.'
+				,parseButton: 'Çözümle & Göster'
+				,togglePanel: 'Paneli Göster/Gizle'
+				,downloadSummary: 'Özet İndir'
+			}
+		};
+
+		const els = {
+			html: document.documentElement,
+			langEn: document.getElementById('lang-en'),
+			langTr: document.getElementById('lang-tr'),
+			pageHeading: document.getElementById('page-heading'),
+			pageSubtitle: document.getElementById('page-subtitle'),
+			labelEmail: document.getElementById('label-email'),
+			inputEmail: document.getElementById('input-email'),
+			labelPassword: document.getElementById('label-password'),
+			inputPassword: document.getElementById('input-password'),
+			remember: document.getElementById('remember-text'),
+			forgot: document.getElementById('forgot-text'),
+			errorBox: document.getElementById('error-box'),
+			errorText: document.getElementById('error-text'),
+			loginBtnText: document.getElementById('login-btn-text'),
+			footerText: document.getElementById('footer-text')
+		};
+		// Login elements
+		els.loginBtn = document.getElementById('login-btn');
+		els.loginPanel = document.getElementById('login-panel');
+		// Results viewer elements
+		els.resultsSection = document.getElementById('results-section');
+		els.resultsFile = document.getElementById('results-file');
+		els.resultsPaste = document.getElementById('results-paste');
+		els.resultsParseBtn = document.getElementById('results-parse-btn');
+		els.resultsToggleBtn = document.getElementById('results-toggle-btn');
+		els.resultsOutput = document.getElementById('results-output');
+		els.resultsTitle = document.getElementById('results-title');
+		els.resultsInstr = document.getElementById('results-instr');
+		els.resultsDownloadBtn = document.getElementById('results-download-btn');
+		// Branding elements
+		els.brandingHeading = document.getElementById('branding-heading');
+		els.brandingSubtitle = document.getElementById('branding-subtitle');
+		// Password toggle elements
+		els.passwordToggle = document.getElementById('password-toggle');
+		els.passwordToggleIcon = document.getElementById('password-toggle-icon');
+
+		// Modal related elements (may not exist yet)
+		els.resetModal = document.getElementById('reset-modal');
+		els.resetEmail = document.getElementById('reset-email');
+		els.resetSendBtn = document.getElementById('reset-send-btn');
+		els.resetMsg = document.getElementById('reset-msg');
+		els.resetCloseBtn = document.getElementById('reset-close-btn');
+
+		function applyLang(lang) {
+			const t = translations[lang] || translations.en;
+			document.documentElement.lang = lang === 'tr' ? 'tr' : 'en';
+			if (els.pageHeading) els.pageHeading.textContent = t.pageHeading;
+			if (els.pageSubtitle) els.pageSubtitle.textContent = t.pageSubtitle;
+			if (els.labelEmail) els.labelEmail.textContent = t.labelEmail;
+			if (els.inputEmail) els.inputEmail.placeholder = t.placeholderEmail;
+			if (els.labelPassword) els.labelPassword.textContent = t.labelPassword;
+			if (els.inputPassword) els.inputPassword.placeholder = t.placeholderPassword;
+			if (els.remember) els.remember.textContent = t.remember;
+			if (els.forgot) els.forgot.textContent = t.forgot;
+			if (els.errorText) els.errorText.textContent = t.invalid;
+			if (els.loginBtnText) els.loginBtnText.textContent = t.signIn;
+			if (els.footerText) els.footerText.textContent = t.footer;
+
+			// Results viewer
+			if (els.resultsTitle) els.resultsTitle.textContent = t.resultsTitle || els.resultsTitle.textContent;
+			if (els.resultsInstr) els.resultsInstr.textContent = t.resultsInstr || els.resultsInstr.textContent;
+			if (els.resultsParseBtn) els.resultsParseBtn.textContent = t.parseButton || els.resultsParseBtn.textContent;
+			if (els.resultsToggleBtn) els.resultsToggleBtn.textContent = t.togglePanel || els.resultsToggleBtn.textContent;
+			if (els.resultsDownloadBtn) els.resultsDownloadBtn.textContent = t.downloadSummary || els.resultsDownloadBtn.textContent;
+
+			// Branding text
+			if (els.brandingHeading) els.brandingHeading.textContent = t.brandingHeading || els.brandingHeading.textContent;
+			if (els.brandingSubtitle) els.brandingSubtitle.textContent = t.brandingSubtitle || els.brandingSubtitle.textContent;
+
+			// Password toggle aria-label and icon
+			if (els.passwordToggle && els.passwordToggleIcon && els.inputPassword) {
+				const isPwd = els.inputPassword.type === 'password';
+				els.passwordToggle.setAttribute('aria-pressed', String(!isPwd));
+				els.passwordToggle.setAttribute('aria-label', isPwd ? t.showPassword : t.hidePassword);
+				els.passwordToggleIcon.textContent = isPwd ? 'visibility_off' : 'visibility';
+			}
+
+			// Modal text
+			if (els.resetModal) {
+				const title = els.resetModal.querySelector('[data-i18n="resetTitle"]');
+				const instr = els.resetModal.querySelector('[data-i18n="resetInstructions"]');
+				const input = els.resetEmail;
+				const send = els.resetSendBtn;
+				const close = els.resetCloseBtn;
+				if (title) title.textContent = t.resetTitle;
+				if (instr) instr.textContent = t.resetInstructions;
+				if (input) input.placeholder = t.resetEmailPlaceholder;
+				if (send) send.textContent = t.resetSend;
+				if (close) close.textContent = t.resetClose;
+			}
+
+			if (els.langEn && els.langTr) {
+				els.langEn.setAttribute('aria-pressed', String(lang === 'en'));
+				els.langTr.setAttribute('aria-pressed', String(lang === 'tr'));
+			}
+
+			localStorage.setItem('siteLang', lang);
+		}
+
+		const stored = localStorage.getItem('siteLang') || (navigator.language && navigator.language.startsWith('tr') ? 'tr' : 'en');
+		applyLang(stored);
+
+		if (els.langEn) els.langEn.addEventListener('click', () => applyLang('en'));
+		if (els.langTr) els.langTr.addEventListener('click', () => applyLang('tr'));
+
+		// Results parsing and display logic
+		function parseCSV(text) {
+			const lines = text.trim().split(/\r?\n/).filter(Boolean);
+			if (!lines.length) return [];
+			const headers = lines[0].split(/,\s*/).map(h => h.replace(/^"|"$/g, ''));
+			const rows = lines.slice(1).map(line => {
+				// simple CSV split (won't handle complex quoted commas)
+				const vals = line.split(/,\s*/).map(v => v.replace(/^"|"$/g, ''));
+				const obj = {};
+				headers.forEach((h, i) => { obj[h] = vals[i] === undefined ? '' : vals[i]; });
+				return obj;
+			});
+			return rows;
+		}
+
+		function tryParseData(raw) {
+			raw = raw.trim();
+			if (!raw) return null;
+			// detect JSON
+			if (raw[0] === '[' || raw[0] === '{') {
+				try {
+					const parsed = JSON.parse(raw);
+					if (Array.isArray(parsed)) return parsed;
+					if (typeof parsed === 'object') return [parsed];
+				} catch (e) {
+					return null;
+				}
+			}
+			// otherwise treat as CSV
+			return parseCSV(raw);
+		}
+
+		function analyzeResults(arr) {
+			// arr is array of objects (responses). Build summary per key.
+			const summary = { total: arr.length, keys: {} };
+			arr.forEach(item => {
+				Object.keys(item).forEach(k => {
+					const v = item[k];
+					const key = k;
+					if (!summary.keys[key]) summary.keys[key] = { type: null, values: {}, numeric: [] };
+					const st = summary.keys[key];
+					if (v === null || v === undefined || v === '') {
+						st.values['(empty)'] = (st.values['(empty)'] || 0) + 1;
+					} else if (!isNaN(Number(v))) {
+						st.type = 'numeric';
+						st.numeric.push(Number(v));
+					} else {
+						st.type = st.type === 'numeric' ? 'mixed' : 'categorical';
+						st.values[v] = (st.values[v] || 0) + 1;
+					}
+				});
+			});
+			// compute stats for numeric
+			Object.keys(summary.keys).forEach(k => {
+				const st = summary.keys[k];
+				if (st.numeric && st.numeric.length) {
+					const n = st.numeric;
+					const sum = n.reduce((a,b) => a+b, 0);
+					st.count = n.length;
+					st.avg = sum / n.length;
+					st.min = Math.min(...n);
+					st.max = Math.max(...n);
+				}
+			});
+			return summary;
+		}
+
+		function renderResults(summary) {
+			if (!els.resultsOutput) return;
+			if (!summary) { els.resultsOutput.innerHTML = '<em>No data parsed.</em>'; return; }
+			const lines = [];
+			lines.push(`<div class="mb-2 font-medium">Total responses: ${summary.total}</div>`);
+			Object.keys(summary.keys).forEach(key => {
+				const st = summary.keys[key];
+				lines.push(`<div class="mb-3"><strong>${key}</strong>`);
+				if (st.type === 'numeric' && st.count) {
+					lines.push(`<div class="text-sm">Count: ${st.count} — Avg: ${st.avg.toFixed(2)} — Min: ${st.min} — Max: ${st.max}</div>`);
+				}
+				if (st.values && Object.keys(st.values).length) {
+					lines.push('<ul class="mt-2 ml-4 list-disc">');
+					Object.keys(st.values).sort((a,b) => st.values[b]-st.values[a]).forEach(val => {
+						lines.push(`<li>${val}: ${st.values[val]}</li>`);
+					});
+					lines.push('</ul>');
+				}
+				lines.push('</div>');
+			});
+			els.resultsOutput.innerHTML = lines.join('\n');
+			// enable download
+			if (els.resultsDownloadBtn) {
+				els.resultsDownloadBtn.classList.remove('hidden');
+				const blob = new Blob([JSON.stringify(summary, null, 2)], { type: 'application/json' });
+				const url = URL.createObjectURL(blob);
+				els.resultsDownloadBtn.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'survey-summary.json'; a.click(); };
+			}
+		}
+
+		// Bind UI
+		if (els.resultsFile) {
+			els.resultsFile.addEventListener('change', function (e) {
+				const f = e.target.files && e.target.files[0];
+				if (!f) return;
+				const reader = new FileReader();
+				reader.onload = function (ev) {
+					const text = ev.target.result;
+					const data = tryParseData(text);
+					if (!data) {
+						els.resultsOutput.innerHTML = '<em>Could not parse file. Ensure JSON array or CSV.</em>';
+						return;
+					}
+					const summary = analyzeResults(data);
+					renderResults(summary);
+					// show panel
+					if (els.resultsSection) els.resultsSection.classList.remove('hidden');
+				};
+				reader.readAsText(f);
+			});
+		}
+
+		if (els.resultsParseBtn) {
+			els.resultsParseBtn.addEventListener('click', function () {
+				const raw = els.resultsPaste ? els.resultsPaste.value : '';
+				const data = tryParseData(raw);
+				if (!data) { els.resultsOutput.innerHTML = '<em>Could not parse input. Provide a JSON array or CSV.</em>'; return; }
+				const summary = analyzeResults(data);
+				renderResults(summary);
+				if (els.resultsSection) els.resultsSection.classList.remove('hidden');
+			});
+		}
+
+		if (els.resultsToggleBtn) {
+			els.resultsToggleBtn.addEventListener('click', function () {
+				if (!els.resultsSection) return;
+				els.resultsSection.classList.toggle('hidden');
+			});
+		}
+
+		// Forgot password modal handlers
+		function openResetModal() {
+			if (!els.resetModal) return;
+			els.resetModal.classList.remove('hidden');
+			els.resetModal.setAttribute('aria-hidden', 'false');
+			// focus input
+			setTimeout(() => {
+				if (els.resetEmail) els.resetEmail.focus();
+			}, 60);
+		}
+
+		function closeResetModal() {
+			if (!els.resetModal) return;
+			els.resetModal.classList.add('hidden');
+			els.resetModal.setAttribute('aria-hidden', 'true');
+			if (els.resetMsg) {
+				els.resetMsg.textContent = '';
+				els.resetMsg.classList.add('hidden');
+			}
+		}
+
+		if (els.forgot) {
+			els.forgot.addEventListener('click', function (e) {
+				e.preventDefault();
+				openResetModal();
+			});
+		}
+
+		if (els.resetCloseBtn) els.resetCloseBtn.addEventListener('click', closeResetModal);
+
+		if (els.resetSendBtn) {
+			els.resetSendBtn.addEventListener('click', function (e) {
+				e.preventDefault();
+				const email = els.resetEmail ? els.resetEmail.value.trim() : '';
+				const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!emailRx.test(email)) {
+					if (els.resetMsg) {
+						els.resetMsg.textContent = translations[localStorage.getItem('siteLang') || 'en'].resetInvalidEmail;
+						els.resetMsg.classList.remove('hidden');
+						els.resetMsg.classList.add('text-error');
+					}
+					return;
+				}
+
+				// Simulate sending
+				els.resetSendBtn.disabled = true;
+				els.resetSendBtn.textContent = '...';
+				setTimeout(() => {
+					if (els.resetMsg) {
+						els.resetMsg.textContent = translations[localStorage.getItem('siteLang') || 'en'].resetSent;
+						els.resetMsg.classList.remove('hidden');
+						els.resetMsg.classList.remove('text-error');
+						els.resetMsg.classList.add('text-primary');
+					}
+					els.resetSendBtn.disabled = false;
+					els.resetSendBtn.textContent = translations[localStorage.getItem('siteLang') || 'en'].resetSend;
+					// auto-close after short delay
+					setTimeout(closeResetModal, 2500);
+				}, 900);
+			});
+		}
+
+		// Password visibility toggle handler
+		if (els.passwordToggle && els.inputPassword) {
+			els.passwordToggle.addEventListener('click', function (e) {
+				e.preventDefault();
+				const input = els.inputPassword;
+				const isPwd = input.type === 'password';
+				input.type = isPwd ? 'text' : 'password';
+				if (els.passwordToggleIcon) els.passwordToggleIcon.textContent = isPwd ? 'visibility' : 'visibility_off';
+				const lang = localStorage.getItem('siteLang') || 'en';
+				els.passwordToggle.setAttribute('aria-label', isPwd ? translations[lang].hidePassword : translations[lang].showPassword);
+				els.passwordToggle.setAttribute('aria-pressed', String(!isPwd));
+			});
+		}
+
+		// Login handler: accept only a single hard-coded admin credential locally
+		if (els.loginBtn) {
+			els.loginBtn.addEventListener('click', function (e) {
+				e.preventDefault();
+				const email = els.inputEmail ? (els.inputEmail.value || '').trim() : '';
+				const pwd = els.inputPassword ? (els.inputPassword.value || '') : '';
+				const lang = localStorage.getItem('siteLang') || 'en';
+
+				// simple client-side validation
+				if (!email || !pwd) {
+					if (els.errorBox) {
+						els.errorText.textContent = translations[lang].invalid;
+						els.errorBox.classList.remove('hidden');
+					}
+					return;
+				}
+
+				// disable UI while checking
+				els.loginBtn.disabled = true;
+				const origBtnText = els.loginBtnText ? els.loginBtnText.textContent : '';
+				if (els.loginBtnText) els.loginBtnText.textContent = '...';
+
+				// Hard-coded admin credentials (only these will work)
+				const ADMIN_EMAIL = 'sedirayanket@gmail.com';
+				const ADMIN_PWD = 'sediray2024';
+
+				if (email === ADMIN_EMAIL && pwd === ADMIN_PWD) {
+					if (els.errorBox) els.errorBox.classList.add('hidden');
+					// successful local login -> go to dashboard
+					window.location.href = '/admin/dashboard';
+					return;
+				} else {
+					// Only the single admin credential is accepted
+					if (els.errorBox) {
+						els.errorText.textContent = translations[lang].invalid;
+						els.errorBox.classList.remove('hidden');
+					}
+					els.loginBtn.disabled = false;
+					if (els.loginBtnText) els.loginBtnText.textContent = origBtnText;
+					return;
+				}
+			});
+		}
+	})();
+</script>
+</body></html>
+
