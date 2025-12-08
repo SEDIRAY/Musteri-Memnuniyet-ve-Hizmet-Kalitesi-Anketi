@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="light" lang="tr">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Anket Analytics - Detaylı Raporlar</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary text-3xl">analytics</span>
+                        <h1 data-i18n="analytics.title" class="text-2xl font-bold">Anket Analytics</h1>
+                    </div>
+                    <div class="flex gap-3">
+                        <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                            <span data-i18n="action.back">Geri</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Survey Selector -->
+            <div class="mb-8">
+                <label data-i18n="analytics.select_survey" class="block text-sm font-medium mb-2">Anket Seç</label>
+                <select id="survey-selector" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="" data-i18n="analytics.select_survey">Yükleniyor...</option>
+                </select>
+            </div>
+
+            <!-- Stats Cards -->
+            <div id="stats-container" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <!-- Dinamik stat cards -->
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Response Distribution Chart -->
+                <div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <h3 data-i18n="analytics.response_distribution" class="text-lg font-bold mb-4">Yanıt Dağılımı</h3>
+                    <canvas id="response-chart" height="300"></canvas>
+                </div>
+
+                <!-- Question Stats -->
+                <div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <h3 data-i18n="analytics.question_stats" class="text-lg font-bold mb-4">Soru İstatistikleri</h3>
+                    <div id="question-stats" class="space-y-3">
+                        <p data-i18n="analytics.detailed_responses" class="text-gray-500">Seçmek için anket seçin...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Responses Table -->
+            <div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 data-i18n="analytics.detailed_responses" class="text-lg font-bold">Detaylı Yanıtlar</h3>
+                    <button id="export-btn" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90">
+                        <span class="material-symbols-outlined">download</span>
+                        <span data-i18n="analytics.download_csv">CSV İndir</span>
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table id="responses-table" class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-700">
+                                <th class="text-left py-3 px-4 font-semibold">Soru</th>
+                                <th data-i18n="dashboard.responses" class="text-left py-3 px-4 font-semibold">Yanıt</th>
+                                <th class="text-left py-3 px-4 font-semibold">Tarih</th>
+                            </tr>
+                        </thead>
+                        <tbody id="responses-tbody">
+                            <tr>
+                                <td colspan="5" class="py-8 text-center text-gray-500">Anket seçmek için yukarıdaki seçiciyi kullanın</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- <script src="backend/admin-api-clean.js"></script> -->
+    <script>
+        const API_BASE_URL = '/api';
+        let surveys = [];
+        let selectedSurveyId = null;
+        let responseChart = null;
+
+        // ================================================
+        // INITIALIZATION
+        // ================================================
+
+        async function init() {
+            await loadSurveys();
+        }
+
+        // ================================================
+        // LOAD SURVEYS
+        // ================================================
+
+        async function loadSurveys() {
+            try {
+                if (typeof window.getSurveys === 'function'){
+                    surveys = await window.getSurveys();
+                } else {
+                    const headers = (typeof window.getAuthHeaders === 'function') ? window.getAuthHeaders() : {'Content-Type':'application/json'};
+                    const response = await fetch(`${API_BASE_URL}/surveys`, { headers });
+                    if (!response.ok) throw new Error('Anketler yüklenemedi');
+                    surveys = await response.json();
+                }
+                renderSurveySelector();
+            } catch (error) {
+                console.error('Error loading surveys:', error);
+            }
+        }
+
+        function renderSurveySelector() {
+            const selector = document.getElementById('survey-selector');
+            selector.innerHTML = `
+                <option value="">Anket Seçin</option>
+                ${surveys.map(s => `<option value="${s.id}">${s.title}</option>`).join('')}
+            `;
+
+            selector.addEventListener('change', (e) => {
+                selectedSurveyId = e.target.value ? parseInt(e.target.value) : null;
+                if (selectedSurveyId) {
+                    loadAnalytics(selectedSurveyId);
+                } else {
+                    clearAnalytics();
+                }
+            });
+        }
+
+        // ================================================
+        // LOAD ANALYTICS
+        // ================================================
+
+        async function loadAnalytics(surveyId) {
+            try {
+                const headers = (typeof window.getAuthHeaders === 'function') ? window.getAuthHeaders() : {'Content-Type':'application/json'};
+                const response = await fetch(`${API_BASE_URL}/surveys/${surveyId}/responses`, { headers });
+                if (!response.ok) throw new Error('Veriler yüklenemedi');
+
+                const responses = await response.json();
+                renderAnalytics(responses);
+                renderResponsesTable(responses);
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        function renderAnalytics(responses) {
+            // Stats
+            renderStats(responses);
+
+            // Charts
+            renderCharts(responses);
+
+            // Question Stats
+            renderQuestionStats(responses);
+        }
+
+        function renderStats(responses) {
+            const container = document.getElementById('stats-container');
+
+            // Unique participants
+            const uniqueParticipants = new Set(responses.map(r => r.participant_id)).size;
+
+            // Response rate
+            const totalPossible = responses.length > 0 ? responses.length : 1;
+            const completionRate = ((uniqueParticipants / totalPossible) * 100).toFixed(1);
+
+            const stats = [
+                { label: 'Toplam Yanıt', value: responses.length, icon: 'assessment' },
+                { label: 'Katılımcı', value: uniqueParticipants, icon: 'people' },
+                { label: 'Tamamlanma %', value: completionRate + '%', icon: 'trending_up' },
+                { label: 'Ortalama Yanıt', value: (responses.length / Math.max(uniqueParticipants, 1)).toFixed(1), icon: 'bar_chart' },
+            ];
+
+            container.innerHTML = stats.map(stat => `
+                <div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-4 shadow-sm">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${stat.label}</p>
+                            <p class="text-2xl font-bold mt-1">${stat.value}</p>
+                        </div>
+                        <span class="material-symbols-outlined text-primary text-3xl opacity-50">${stat.icon}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCharts(responses) {
+            // Response type distribution
+            const typeCounts = {};
+            responses.forEach(r => {
+                typeCounts[r.response_type || 'text'] = (typeCounts[r.response_type || 'text'] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('response-chart').getContext('2d');
+
+            if (responseChart) {
+                responseChart.destroy();
+            }
+
+            responseChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(typeCounts),
+                    datasets: [{
+                        data: Object.values(typeCounts),
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444',
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderQuestionStats(responses) {
+            const container = document.getElementById('question-stats');
+            const questionStats = {};
+
+            responses.forEach(r => {
+                if (!questionStats[r.question_text]) {
+                    questionStats[r.question_text] = { count: 0, values: [] };
+                }
+                questionStats[r.question_text].count++;
+                if (r.response_value) {
+                    questionStats[r.question_text].values.push(r.response_value);
+                }
+            });
+
+            container.innerHTML = Object.entries(questionStats).map(([question, stats]) => `
+                <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                    <p class="font-medium text-sm mb-1">${question}</p>
+                    <p class="text-xs text-gray-500">
+                        ${stats.count} yanıt
+                        ${stats.values.length > 0 ? ` • Örn: ${stats.values[0]}` : ''}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function renderResponsesTable(responses) {
+            const tbody = document.getElementById('responses-tbody');
+
+            tbody.innerHTML = responses.slice(0, 50).map(r => `
+                <tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
+                    <td class="py-3 px-4 text-xs">${r.question_text || '-'}</td>
+                    <td class="py-3 px-4 text-xs">${r.response_value || '-'}</td>
+                    <td class="py-3 px-4 text-xs">${new Date(r.created_at).toLocaleDateString('tr-TR')}</td>
+                </tr>
+            `).join('');
+
+            // Export button
+            document.getElementById('export-btn').onclick = () => exportCSV(responses);
+        }
+
+        // ================================================
+        // EXPORT CSV
+        // ================================================
+
+        function exportCSV(responses) {
+            const headers = ['Katılımcı', 'E-posta', 'Telefon', 'Soru', 'Yanıt', 'Tarih'];
+            const rows = responses.map(r => [
+                r.participant_name || '-',
+                r.participant_email || '-',
+                r.participant_phone || '-',
+                r.question_text || '-',
+                r.response_value || '-',
+                new Date(r.created_at).toLocaleDateString('tr-TR'),
+            ]);
+
+            const csv = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `anket-yanıtlar-${selectedSurveyId}-${new Date().toISOString().slice(0, 10)}.csv`;
+            link.click();
+        }
+
+        function clearAnalytics() {
+            document.getElementById('stats-container').innerHTML = '';
+            document.getElementById('question-stats').innerHTML = '<p class="text-gray-500">Seçmek için anket seçin...</p>';
+            document.getElementById('responses-tbody').innerHTML = `
+                <tr>
+                    <td colspan="3" class="py-8 text-center text-gray-500">Anket seçmek için yukarıdaki seçiciyi kullanın</td>
+                </tr>
+            `;
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>

@@ -594,7 +594,7 @@
 				if (email === ADMIN_EMAIL && pwd === ADMIN_PWD) {
 					if (els.errorBox) els.errorBox.classList.add('hidden');
 					// successful local login -> go to dashboard
-					window.location.href = '/admin/dashboard';
+					window.location.href = "{{ url_for('admin_dashboard') }}";
 					return;
 				} else {
 					// Only the single admin credential is accepted

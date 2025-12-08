@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Customer Service Feedback Survey</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#137fec",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            display: ["Inter", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background-light font-display text-slate-900">
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-3xl bg-white rounded-xl shadow-lg border border-slate-200 p-6 sm:p-8 space-y-6">
+      <!-- Survey Selection -->
+      <div class="mb-4">
+          <label for="surveySelect" class="block text-sm font-medium text-slate-700 mb-1">Anket Seçiniz / Select Survey</label>
+          <select id="surveySelect" class="w-full rounded-lg border-slate-300 text-sm focus:ring-primary focus:border-primary">
+              <option value="">Yükleniyor...</option>
+          </select>
+      </div>
+
+      <!-- Header + Language Toggle -->
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 id="title" class="text-2xl sm:text-3xl font-bold tracking-tight">
+            Customer Service Feedback Survey
+          </h1>
+          <p id="subtitle" class="mt-2 text-slate-600 text-sm sm:text-base">
+            Thank you for taking the time to provide your feedback. Your responses will help us improve our service.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="langBtnEn"
+            type="button"
+            class="px-3 py-1 rounded-full text-sm font-medium bg-primary text-white"
+          >
+            EN
+          </button>
+          <button
+            id="langBtnTr"
+            type="button"
+            class="px-3 py-1 rounded-full text-sm font-medium bg-slate-300 text-slate-900"
+          >
+            TR
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center text-xs sm:text-sm">
+          <span id="progressText" class="font-medium text-slate-700">
+            12% Complete
+          </span>
+        </div>
+        <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+          <div
+            id="progressBar"
+            class="h-2 bg-primary transition-all duration-200"
+            style="width: 12%;"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Questions Container -->
+      <div id="questionsContainer" class="space-y-4">
+        <!-- JS dolduracak -->
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center pt-2">
+        <button
+          id="prevBtn"
+          type="button"
+          class="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <span id="prevText">Previous</span>
+        </button>
+        <button
+          id="nextBtn"
+          type="button"
+          class="px-5 py-2 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors"
+        >
+          <span id="nextText">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLanguage = "tr";
+    let currentQuestion = 0;
+    let answers = {};
+    let surveyData = null;
+    let currentSurveyId = new URLSearchParams(window.location.search).get('id');
+
+    async function initSurveySelect() {
+        const select = document.getElementById('surveySelect');
+        try {
+            const response = await fetch('/api/surveys');
+            const surveys = await response.json();
+            
+            select.innerHTML = '<option value="">Seçiniz / Select</option>';
+            surveys.forEach(s => {
+                const option = document.createElement('option');
+                option.value = s.id;
+                option.textContent = s.title;
+                if (s.id == currentSurveyId) option.selected = true;
+                select.appendChild(option);
+            });
+
+            // If no ID in URL but surveys exist, select the first one automatically
+            if (!currentSurveyId && surveys.length > 0) {
+                currentSurveyId = surveys[0].id;
+                select.value = currentSurveyId;
+                // Update URL without reloading
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.set('id', currentSurveyId);
+                window.history.pushState({}, '', newUrl);
+                loadSurvey(currentSurveyId);
+            } else if (currentSurveyId) {
+                loadSurvey(currentSurveyId);
+            }
+
+        } catch (e) {
+            console.error("Error loading surveys list", e);
+            select.innerHTML = '<option value="">Hata / Error</option>';
+        }
+
+        select.addEventListener('change', (e) => {
+            const newId = e.target.value;
+            if (newId) {
+                window.location.href = `?id=${newId}`;
+            }
+        });
+    }
+
+    async function loadSurvey(id) {
+        if (!id) {
+             // Fallback logic removed or kept minimal
+             return;
+        }
+
+        try {
+            const response = await fetch(`/api/surveys/${id}`);
+            if (!response.ok) throw new Error("Anket yüklenemedi");
+            surveyData = await response.json();
+            
+            // Update title and description
+            document.getElementById('title').textContent = surveyData.title;
+            document.getElementById('subtitle').textContent = surveyData.description;
+            
+            // Reset state
+            currentQuestion = 0;
+            answers = {};
+            updateUI();
+        } catch (error) {
+            console.error(error);
+            alert("Anket yüklenirken bir hata oluştu.");
+        }
+    }
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      const btnEn = document.getElementById("langBtnEn");
+      const btnTr = document.getElementById("langBtnTr");
+
+      if (lang === "en") {
+        btnEn.classList.replace("bg-slate-300", "bg-primary");
+        btnEn.classList.replace("text-slate-900", "text-white");
+        btnTr.classList.replace("bg-primary", "bg-slate-300");
+        btnTr.classList.replace("text-white", "text-slate-900");
+      } else {
+        btnTr.classList.replace("bg-slate-300", "bg-primary");
+        btnTr.classList.replace("text-slate-900", "text-white");
+        btnEn.classList.replace("bg-primary", "bg-slate-300");
+        btnEn.classList.replace("text-white", "text-slate-900");
+      }
+      updateUI();
+    }
+
+    function updateUI() {
+      if (!surveyData || !surveyData.questions || surveyData.questions.length === 0) return;
+
+      const q = surveyData.questions[currentQuestion];
+      const container = document.getElementById("questionsContainer");
+      
+      // Render Question
+      container.innerHTML = `
+        <div class="animate-fade-in">
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">${currentQuestion + 1}. ${q.text}</h2>
+            <div id="questionContent"></div>
+        </div>
+      `;
+
+      const content = document.getElementById("questionContent");
+
+      if (q.type === "rating") {
+        // Rating UI
+        let html = '<div class="flex gap-4 mt-2">';
+        for (let i = 1; i <= 5; i++) {
+            const isChecked = answers[currentQuestion] == i ? 'checked' : '';
+            html += `
+                <label class="cursor-pointer">
+                    <input type="radio" name="q${currentQuestion}" value="${i}" class="peer sr-only" ${isChecked}>
+                    <div class="w-10 h-10 rounded-full border-2 border-slate-200 flex items-center justify-center text-slate-600 font-medium peer-checked:border-primary peer-checked:bg-primary peer-checked:text-white transition-all hover:border-primary/50">
+                        ${i}
+                    </div>
+                </label>
+            `;
+        }
+        html += '</div>';
+        content.innerHTML = html;
+      } else if (q.type === "yesno") {
+         // Yes/No UI
+         const isYes = answers[currentQuestion] === 'Yes' ? 'checked' : '';
+         const isNo = answers[currentQuestion] === 'No' ? 'checked' : '';
+         content.innerHTML = `
+            <div class="flex gap-4 mt-2">
+                <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-slate-200 hover:bg-slate-50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <input type="radio" name="q${currentQuestion}" value="Yes" class="text-primary focus:ring-primary" ${isYes}>
+                    <span class="text-sm font-medium text-slate-700">Evet / Yes</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-slate-200 hover:bg-slate-50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <input type="radio" name="q${currentQuestion}" value="No" class="text-primary focus:ring-primary" ${isNo}>
+                    <span class="text-sm font-medium text-slate-700">Hayır / No</span>
+                </label>
+            </div>
+         `;
+      } else {
+        // Text UI
+        content.innerHTML = `
+          <textarea
+            name="q${currentQuestion}"
+            class="mt-2 w-full rounded-lg border border-slate-300 bg-background-light p-3 text-slate-700 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
+            rows="5"
+            placeholder="Cevabınız..."
+          >${answers[currentQuestion] || ""}</textarea>
+        `;
+      }
+
+      updateProgress();
+      
+      // Update buttons text based on language
+      document.getElementById("prevText").textContent = currentLanguage === 'tr' ? 'Önceki' : 'Previous';
+      document.getElementById("nextText").textContent = currentLanguage === 'tr' ? (currentQuestion === surveyData.questions.length - 1 ? 'Tamamla' : 'Sonraki') : (currentQuestion === surveyData.questions.length - 1 ? 'Finish' : 'Next');
+      
+      const prevBtn = document.getElementById("prevBtn");
+      if (prevBtn) prevBtn.disabled = currentQuestion === 0;
+    }
+
+    function updateProgress() {
+      if (!surveyData || !surveyData.questions) return;
+      const total = surveyData.questions.length;
+      const percent = Math.round(((currentQuestion + 1) / total) * 100);
+
+      const progressText = document.getElementById("progressText");
+      const progressBar = document.getElementById("progressBar");
+      const completedText = currentLanguage === 'tr' ? 'Tamamlandı' : 'Complete';
+
+      if (progressText)
+        progressText.textContent = percent + "% " + completedText;
+      if (progressBar) progressBar.style.width = percent + "%";
+    }
+
+    function saveAnswer() {
+      const radio = document.querySelector(
+        `input[name="q${currentQuestion}"]:checked`
+      );
+      const textarea = document.querySelector(
+        `textarea[name="q${currentQuestion}"]`
+      );
+
+      if (radio) {
+        answers[currentQuestion] = radio.value;
+      } else if (textarea) {
+        answers[currentQuestion] = textarea.value;
+      }
+    }
+
+    // Event listeners
+    document.getElementById("langBtnEn").addEventListener("click", () => {
+      setLanguage("en");
+    });
+
+    document.getElementById("langBtnTr").addEventListener("click", () => {
+      setLanguage("tr");
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      saveAnswer();
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        updateUI();
+      }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", async () => {
+      saveAnswer();
+      if (currentQuestion < surveyData.questions.length - 1) {
+        currentQuestion++;
+        updateUI();
+      } else {
+        // Submit answers
+        const formattedAnswers = surveyData.questions.map((q, index) => ({
+            question_text: q.text,
+            value: answers[index],
+            type: q.type
+        }));
+
+        const payload = {
+            participant_id: 'user_' + Math.random().toString(36).substr(2, 9),
+            answers: formattedAnswers
+        };
+
+        try {
+            const response = await fetch(`/api/surveys/${currentSurveyId}/responses`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                window.location.href = "{{ url_for('tesekkur') }}";
+            } else {
+                alert('Hata oluştu. Lütfen tekrar deneyin.');
+            }
+        } catch (error) {
+            console.error('Error submitting survey:', error);
+            alert('Bağlantı hatası.');
+        }
+      }
+    });
+
+    // Initialize
+    initSurveySelect();
+    setLanguage("tr");
+  </script>
+</body>
+</html>

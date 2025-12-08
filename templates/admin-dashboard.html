@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html class="light" lang="tr">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Admin Dashboard - Anket Yönetimi</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "form-background-light": "#F4F7F9",
+                        "form-background-dark": "#1a2632",
+                        "text-light": "#333333",
+                        "text-dark": "#e0e0e0",
+                        "border-light": "#cfdbe7",
+                        "border-dark": "#4a5568",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white dark:bg-slate-900 border-b border-border-light dark:border-border-dark shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary text-3xl">dashboard</span>
+                        <h1 data-i18n="dashboard.title" class="text-2xl font-bold text-text-light dark:text-text-dark">Anket Yönetimi</h1>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex gap-1 rounded-lg bg-gray-100 dark:bg-slate-800 p-1">
+                            <button data-lang="tr" class="px-3 py-1 rounded text-sm font-medium text-gray-600 hover:bg-white dark:hover:bg-slate-700" onclick="setLanguage('tr')">TR</button>
+                            <button data-lang="en" class="px-3 py-1 rounded text-sm font-medium text-gray-600 hover:bg-white dark:hover:bg-slate-700" onclick="setLanguage('en')">EN</button>
+                        </div>
+                        <button id="api-status-btn" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 dark:bg-slate-800">
+                            <div id="api-status-dot" class="w-2 h-2 rounded-full bg-gray-400"></div>
+                            <span id="api-status-text">Kontrol ediliyor...</span>
+                        </button>
+                        <a href="{{ url_for('analytic_page') }}" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
+                            <span class="material-symbols-outlined text-lg">analytics</span>
+                            Analytics
+                        </a>
+                        <button onclick="openContactModal()" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
+                            <span class="material-symbols-outlined text-lg">mail</span>
+                            İletişim
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Yeni Anket Oluştur Bölümü -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="lg:col-span-1">
+                    <div class="bg-white dark:bg-slate-900 rounded-lg border border-border-light dark:border-border-dark p-6 shadow-sm">
+                        <h2 data-i18n="dashboard.new_survey" class="text-xl font-bold mb-6">Yeni Anket Oluştur</h2>
+                        <form id="survey-form" class="space-y-4">
+                            <div>
+                                <label data-i18n="dashboard.survey_title" class="block text-sm font-medium mb-2">Anket Başlığı *</label>
+                                <input 
+                                    type="text" 
+                                    id="survey-title" 
+                                    class="w-full px-3 py-2 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                                    data-i18n-placeholder="dashboard.survey_title"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label data-i18n="dashboard.description" class="block text-sm font-medium mb-2">Açıklama</label>
+                                <textarea 
+                                    id="survey-description" 
+                                    rows="3"
+                                    class="w-full px-3 py-2 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                                    data-i18n-placeholder="dashboard.description"
+                                ></textarea>
+                            </div>
+                            <div>
+                                <label data-i18n="dashboard.status" class="block text-sm font-medium mb-2">Durum</label>
+                                <select 
+                                    id="survey-status" 
+                                    class="w-full px-3 py-2 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                                >
+                                    <option value="active">Aktif</option>
+                                    <option value="paused">Duraklatılmış</option>
+                                    <option value="closed">Kapalı</option>
+                                </select>
+                            </div>
+
+                            <!-- Questions Section -->
+                            <div class="border-t border-border-light dark:border-border-dark pt-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-sm font-medium">Sorular</label>
+                                    <button type="button" id="add-question-btn" class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700">+ Soru Ekle</button>
+                                </div>
+                                <div id="questions-container" class="space-y-3">
+                                    <!-- Dynamic questions will be added here -->
+                                </div>
+                            </div>
+
+                                <button 
+                                type="submit" 
+                                class="w-full px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary/90 flex items-center justify-center gap-2"
+                            >
+                                <span class="material-symbols-outlined">add</span>
+                                <span data-i18n="dashboard.create_btn">Anket Oluştur</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Anket Listesi -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white dark:bg-slate-900 rounded-lg border border-border-light dark:border-border-dark p-6 shadow-sm">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 data-i18n="dashboard.surveys" class="text-xl font-bold">Anketler</h2>
+                            <div class="flex items-center gap-2">
+                                <input 
+                                    type="text" 
+                                    id="search-survey" 
+                                    class="px-3 py-2 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                    data-i18n-placeholder="dashboard.search"
+                                />
+                            </div>
+                        </div>
+                        
+                        <!-- Loading Indicator -->
+                            <div id="loading-indicator" class="flex items-center justify-center gap-2 py-8">
+                            <div class="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
+                            <span data-i18n="dashboard.loading">Anketler yükleniyor...</span>
+                        </div>
+
+                        <!-- Surveys Table -->
+                        <div id="surveys-container" class="overflow-x-auto hidden">
+                            <table class="w-full">
+                                <thead>
+                                        <tr class="border-b border-border-light dark:border-border-dark">
+                                        <th data-i18n="dashboard.survey_title" class="text-left py-3 px-4 font-semibold text-sm">Başlık</th>
+                                        <th data-i18n="dashboard.status" class="text-left py-3 px-4 font-semibold text-sm">Durum</th>
+                                        <th data-i18n="dashboard.participants" class="text-left py-3 px-4 font-semibold text-sm">Katılımcı</th>
+                                        <th data-i18n="dashboard.responses" class="text-left py-3 px-4 font-semibold text-sm">Yanıt</th>
+                                        <th data-i18n="dashboard.actions" class="text-left py-3 px-4 font-semibold text-sm">İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="surveys-tbody">
+                                    <!-- Dinamik içerik buraya gelecek -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="empty-state" class="text-center py-8">
+                            <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">quiz</span>
+                            <p data-i18n="dashboard.no_surveys" class="text-gray-500">Henüz anket bulunmuyor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Edit Survey -->
+            <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                <div class="bg-white dark:bg-slate-900 rounded-lg max-w-md w-full mx-4 p-6 shadow-lg fade-in">
+                    <h3 data-i18n="dashboard.edit" class="text-xl font-bold mb-4">Anketi Düzenle</h3>
+                    <form id="edit-form" class="space-y-4">
+                        <input type="hidden" id="edit-survey-id"/>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Başlık</label>
+                            <input 
+                                type="text" 
+                                id="edit-title" 
+                                class="w-full px-3 py-2 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Açıklama</label>
+                            <textarea 
+                                id="edit-description" 
+                                rows="3"
+                                class="w-full px-3 py-2 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Durum</label>
+                            <select 
+                                id="edit-status" 
+                                class="w-full px-3 py-2 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                                <option value="active">Aktif</option>
+                                <option value="paused">Duraklatılmış</option>
+                                <option value="closed">Kapalı</option>
+                            </select>
+                        </div>
+
+                        <!-- Edit Questions Section -->
+                        <div class="border-t border-border-light dark:border-border-dark pt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-sm font-medium">Sorular</label>
+                                <button type="button" id="edit-add-question-btn" class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700">+ Soru Ekle</button>
+                            </div>
+                            <div id="edit-questions-container" class="space-y-3">
+                                <!-- Dynamic questions will be added here -->
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button 
+                                type="button" 
+                                onclick="document.getElementById('edit-modal').classList.add('hidden')"
+                                class="flex-1 px-4 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-slate-800"
+                            >
+                                <span data-i18n="action.cancel">İptal</span>
+                            </button>
+                            <button 
+                                type="submit" 
+                                class="flex-1 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90"
+                            >
+                                <span data-i18n="action.save">Kaydet</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal: Delete Confirmation -->
+            <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                <div class="bg-white dark:bg-slate-900 rounded-lg max-w-md w-full mx-4 p-6 shadow-lg fade-in">
+                    <h3 data-i18n="dashboard.delete" class="text-xl font-bold mb-2 text-red-600">Anketi Sil</h3>
+                    <p data-i18n-placeholder="action.delete" class="text-gray-600 dark:text-gray-400 mb-6">
+                        Bu anketi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                    </p>
+                    <div class="flex gap-3">
+                        <button 
+                            type="button" 
+                            onclick="document.getElementById('delete-modal').classList.add('hidden')"
+                            class="flex-1 px-4 py-2 rounded-lg border border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-slate-800"
+                        >
+                            <span data-i18n="action.cancel">İptal</span>
+                        </button>
+                        <button 
+                            type="button" 
+                            id="delete-confirm-btn"
+                            class="flex-1 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                        >
+                            <span data-i18n="dashboard.delete">Anketi Sil</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal: Contact Messages -->
+            <div id="contact-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                <div class="bg-white dark:bg-slate-900 rounded-lg max-w-4xl w-full mx-4 p-6 shadow-lg fade-in h-[80vh] flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">İletişim Mesajları</h3>
+                        <button onclick="document.getElementById('contact-modal').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-y-auto flex-1">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-border-light dark:border-border-dark sticky top-0 bg-white dark:bg-slate-900">
+                                    <th class="text-left py-3 px-4 font-semibold text-sm">Tarih</th>
+                                    <th class="text-left py-3 px-4 font-semibold text-sm">Ad</th>
+                                    <th class="text-left py-3 px-4 font-semibold text-sm">E-posta</th>
+                                    <th class="text-left py-3 px-4 font-semibold text-sm">Mesaj</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contact-messages-tbody">
+                                <!-- Messages will be loaded here -->
+                            </tbody>
+                        </table>
+                        <div id="contact-loading" class="text-center py-4 hidden">
+                            Yükleniyor...
+                        </div>
+                        <div id="contact-empty" class="text-center py-4 hidden text-gray-500">
+                            Mesaj bulunamadı.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success/Error Notifications -->
+            <div id="notification" class="fixed top-4 right-4 max-w-sm hidden shadow-lg rounded-lg p-4 fade-in z-40">
+                <div class="flex items-center gap-3">
+                    <span id="notification-icon" class="material-symbols-outlined"></span>
+                    <div>
+                        <p id="notification-title" class="font-semibold"></p>
+                        <p id="notification-message" class="text-sm opacity-90"></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- API Client -->
+    <!-- <script src="backend/admin-api-clean.js"></script> -->
+
+    <!-- i18n -->
+    <!-- <script src="backend/i18n.js"></script> -->
+
+    <!-- Dashboard Logic -->
+    <script>
+    const translations = {
+        tr: {
+            dashboard: {
+                title: "Anket Yönetimi",
+                new_survey: "Yeni Anket Oluştur",
+                survey_title: "Anket Başlığı",
+                description: "Açıklama",
+                status: "Durum",
+                create_btn: "Anket Oluştur",
+                surveys: "Anketler",
+                search: "Anket ara...",
+                loading: "Anketler yükleniyor...",
+                participants: "Katılımcı",
+                responses: "Yanıt",
+                actions: "İşlem",
+                no_surveys: "Henüz anket bulunmuyor",
+                edit: "Anketi Düzenle",
+                delete: "Anketi Sil"
+            },
+            action: {
+                cancel: "İptal",
+                save: "Kaydet"
+            },
+            notify: {
+                success: "Başarılı",
+                error: "Hata",
+                survey_created: "Anket başarıyla oluşturuldu",
+                survey_updated: "Anket başarıyla güncellendi",
+                survey_deleted: "Anket başarıyla silindi"
+            }
+        },
+        en: {
+            dashboard: {
+                title: "Survey Management",
+                new_survey: "Create New Survey",
+                survey_title: "Survey Title",
+                description: "Description",
+                status: "Status",
+                create_btn: "Create Survey",
+                surveys: "Surveys",
+                search: "Search surveys...",
+                loading: "Loading surveys...",
+                participants: "Participants",
+                responses: "Responses",
+                actions: "Actions",
+                no_surveys: "No surveys found",
+                edit: "Edit Survey",
+                delete: "Delete Survey"
+            },
+            action: {
+                cancel: "Cancel",
+                save: "Save"
+            },
+            notify: {
+                success: "Success",
+                error: "Error",
+                survey_created: "Survey created successfully",
+                survey_updated: "Survey updated successfully",
+                survey_deleted: "Survey deleted successfully"
+            }
+        }
+    };
+
+    let currentLang = localStorage.getItem('language') || 'tr';
+
+    function t(key) {
+        const keys = key.split('.');
+        let value = translations[currentLang];
+        for (const k of keys) {
+            value = value && value[k];
+        }
+        return value || key;
+    }
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        document.documentElement.lang = lang;
+        
+        // Update all elements with data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            el.textContent = t(key);
+        });
+
+        // Update placeholders
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            el.placeholder = t(key);
+        });
+    }
+
+    // Initialize language on load
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
+    });
+
+    (async function(){
+        try {
+            const API_BASE_URL = '/api';
+            let surveys = [];
+            let currentDeleteId = null;
+
+            function setAPIStatus(text, bgColor){
+                const dot = document.getElementById('api-status-dot');
+                const statusText = document.getElementById('api-status-text');
+                if (dot) dot.className = `w-2 h-2 rounded-full ${bgColor}`;
+                if (statusText) statusText.textContent = text;
+            }
+
+            async function checkAPI(){
+                try{
+                    const res = await fetch(`${API_BASE_URL}/health`);
+                    if (res.ok) { setAPIStatus('Canlı','bg-green-500'); return true; }
+                }catch(e){ /* ignore */ }
+                setAPIStatus('Çevrimdışı','bg-red-500');
+                return false;
+            }
+
+            async function loadSurveys(){
+                const loading = document.getElementById('loading-indicator');
+                const container = document.getElementById('surveys-container');
+                const emptyState = document.getElementById('empty-state');
+                if (loading) loading.classList.remove('hidden');
+                try{
+                    if (typeof window.getSurveys === 'function'){
+                        surveys = await window.getSurveys();
+                    } else {
+                        const res = await fetch(`${API_BASE_URL}/surveys`);
+                        surveys = await res.json();
+                    }
+                    renderSurveys();
+                }catch(err){
+                    showNotification('Hata', err.message || 'Anketler yüklenemedi', 'error');
+                    console.error(err);
+                } finally{
+                    if (loading) loading.classList.add('hidden');
+                }
+            }
+
+            function renderSurveys(filtered=null){
+                const toRender = filtered || surveys || [];
+                const tbody = document.getElementById('surveys-tbody');
+                const container = document.getElementById('surveys-container');
+                const emptyState = document.getElementById('empty-state');
+                if (!tbody || !container || !emptyState) return;
+                if (toRender.length === 0){
+                    container.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    tbody.innerHTML = '';
+                    return;
+                }
+                container.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+
+                tbody.innerHTML = '';
+                toRender.forEach(survey => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-slate-800 transition';
+                    tr.innerHTML = `
+                        <td class="py-3 px-4">
+                            <div class="font-medium">${escapeHtml(survey.title)}</div>
+                            <div class="text-xs text-gray-500">${escapeHtml(survey.description || '-')}</div>
+                        </td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-medium ${survey.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : ''} ${survey.status === 'paused' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : ''} ${survey.status === 'closed' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : ''}">${survey.status === 'active' ? 'Aktif' : survey.status === 'paused' ? 'Duraklatılmış' : 'Kapalı'}</span>
+                        </td>
+                        <td class="py-3 px-4 text-sm">${survey.participant_count || 0}</td>
+                        <td class="py-3 px-4 text-sm">${survey.response_count || 0}</td>
+                        <td class="py-3 px-4">
+                            <div class="flex gap-2">
+                                <button data-action="edit" data-id="${survey.id}" class="p-1 rounded hover:bg-blue-100 dark:hover:bg-blue-900 text-primary" title="Düzenle"><span class="material-symbols-outlined text-lg">edit</span></button>
+                                <button data-action="delete" data-id="${survey.id}" class="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900 text-red-600" title="Sil"><span class="material-symbols-outlined text-lg">delete</span></button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // attach handlers
+                tbody.querySelectorAll('button[data-action="edit"]').forEach(btn => {
+                    btn.addEventListener('click', (e)=>{
+                        const id = parseInt(btn.getAttribute('data-id'));
+                        openEditModal(id);
+                    });
+                });
+                tbody.querySelectorAll('button[data-action="delete"]').forEach(btn => {
+                    btn.addEventListener('click', (e)=>{
+                        const id = parseInt(btn.getAttribute('data-id'));
+                        currentDeleteId = id;
+                        document.getElementById('delete-modal').classList.remove('hidden');
+                    });
+                });
+            }
+
+            // escape helper
+            function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+            // Question Management
+            const questionsContainer = document.getElementById('questions-container');
+            const addQuestionBtn = document.getElementById('add-question-btn');
+
+            if (addQuestionBtn) {
+                addQuestionBtn.addEventListener('click', () => {
+                    const id = Date.now();
+                    const div = document.createElement('div');
+                    div.className = 'flex gap-2 items-start p-2 bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700';
+                    div.innerHTML = `
+                        <div class="flex-1 space-y-2">
+                            <input type="text" placeholder="Soru metni" class="question-text w-full px-2 py-1 text-sm rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" required>
+                            <select class="question-type w-full px-2 py-1 text-sm rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+                                <option value="text">Metin</option>
+                                <option value="rating">Puanlama (1-5)</option>
+                                <option value="yesno">Evet/Hayır</option>
+                            </select>
+                        </div>
+                        <button type="button" class="text-red-500 hover:text-red-700" onclick="this.parentElement.remove()">
+                            <span class="material-symbols-outlined text-lg">delete</span>
+                        </button>
+                    `;
+                    questionsContainer.appendChild(div);
+                });
+            }
+
+            // form submit
+            const surveyForm = document.getElementById('survey-form');
+            if (surveyForm) surveyForm.addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                const title = (document.getElementById('survey-title')?.value || '').trim();
+                const description = (document.getElementById('survey-description')?.value || '').trim();
+                const status = document.getElementById('survey-status')?.value || 'active';
+                
+                // Collect questions
+                const questions = [];
+                document.querySelectorAll('#questions-container > div').forEach(div => {
+                    const text = div.querySelector('.question-text').value.trim();
+                    const type = div.querySelector('.question-type').value;
+                    if (text) {
+                        questions.push({ text, type });
+                    }
+                });
+
+                if (!title) return showNotification('Uyarı','Anket başlığı gerekli','warning');
+                try{
+                    // Prefer client helper which adds auth headers
+                    const payload = { title, description, created_by:1, status, questions };
+                    if (typeof window.createSurvey === 'function'){
+                        await window.createSurvey(payload);
+                    } else {
+                        const headers = (typeof window.getAuthHeaders === 'function') ? window.getAuthHeaders() : {'Content-Type':'application/json'};
+                        const res = await fetch(`${API_BASE_URL}/surveys`,{ method:'POST', headers, body: JSON.stringify(payload) });
+                        if (!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.error || 'Anket oluşturulamadı'); }
+                    }
+                    showNotification(typeof t === 'function' ? t('notify.success') : 'Başarılı', typeof t === 'function' ? t('notify.survey_created') : 'Anket başarıyla oluşturuldu','success');
+                    surveyForm.reset();
+                    questionsContainer.innerHTML = ''; // Clear questions
+                    await loadSurveys();
+                }catch(err){ showNotification(typeof t === 'function' ? t('notify.error') : 'Hata', err.message || (typeof t === 'function' ? t('notify.error') : 'Hata'), 'error'); }
+            });
+
+            // edit modal
+            function openEditModal(id){
+                const survey = surveys.find(s=>s.id===id); if(!survey) return;
+                document.getElementById('edit-survey-id').value = id;
+                document.getElementById('edit-title').value = survey.title || '';
+                document.getElementById('edit-description').value = survey.description || '';
+                document.getElementById('edit-status').value = survey.status || 'active';
+                
+                // Populate questions
+                const container = document.getElementById('edit-questions-container');
+                container.innerHTML = '';
+                if (survey.questions && survey.questions.length > 0) {
+                    survey.questions.forEach(q => {
+                        addEditQuestion(q.text, q.type);
+                    });
+                }
+
+                document.getElementById('edit-modal').classList.remove('hidden');
+            }
+
+            function addEditQuestion(text='', type='text') {
+                const container = document.getElementById('edit-questions-container');
+                const div = document.createElement('div');
+                div.className = 'flex gap-2 items-start p-2 bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700';
+                div.innerHTML = `
+                    <div class="flex-1 space-y-2">
+                        <input type="text" value="${escapeHtml(text)}" placeholder="Soru metni" class="edit-question-text w-full px-2 py-1 text-sm rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" required>
+                        <select class="edit-question-type w-full px-2 py-1 text-sm rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+                            <option value="text" ${type==='text'?'selected':''}>Metin</option>
+                            <option value="rating" ${type==='rating'?'selected':''}>Puanlama (1-5)</option>
+                            <option value="yesno" ${type==='yesno'?'selected':''}>Evet/Hayır</option>
+                        </select>
+                    </div>
+                    <button type="button" class="text-red-500 hover:text-red-700" onclick="this.parentElement.remove()">
+                        <span class="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                `;
+                container.appendChild(div);
+            }
+
+            const editAddQuestionBtn = document.getElementById('edit-add-question-btn');
+            if (editAddQuestionBtn) {
+                editAddQuestionBtn.addEventListener('click', () => {
+                    addEditQuestion();
+                });
+            }
+
+            const editForm = document.getElementById('edit-form');
+            if (editForm) editForm.addEventListener('submit', async (e)=>{
+                e.preventDefault();
+                const id = parseInt(document.getElementById('edit-survey-id').value);
+                const title = (document.getElementById('edit-title')?.value || '').trim();
+                const description = (document.getElementById('edit-description')?.value || '').trim();
+                const status = document.getElementById('edit-status')?.value || 'active';
+                
+                // Collect questions
+                const questions = [];
+                document.querySelectorAll('#edit-questions-container > div').forEach(div => {
+                    const text = div.querySelector('.edit-question-text').value.trim();
+                    const type = div.querySelector('.edit-question-type').value;
+                    if (text) {
+                        questions.push({ text, type });
+                    }
+                });
+
+                try{
+                    const payload = { title, description, status, questions };
+                    if (typeof window.updateSurvey === 'function'){
+                        await window.updateSurvey(id,payload);
+                    } else {
+                        const headers = (typeof window.getAuthHeaders === 'function') ? window.getAuthHeaders() : {'Content-Type':'application/json'};
+                        const res = await fetch(`${API_BASE_URL}/surveys/${id}`,{ method:'PUT', headers, body: JSON.stringify(payload) });
+                        if (!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.error || 'Anket güncellenemedi'); }
+                    }
+                    showNotification(typeof t === 'function' ? t('notify.success') : 'Başarılı', typeof t === 'function' ? t('notify.survey_updated') : 'Anket başarıyla güncellendi','success');
+                    document.getElementById('edit-modal').classList.add('hidden');
+                    await loadSurveys();
+                }catch(err){ showNotification(typeof t === 'function' ? t('notify.error') : 'Hata', err.message || (typeof t === 'function' ? t('notify.error') : 'Hata'), 'error'); }
+            });
+
+            // delete confirm
+            const deleteBtn = document.getElementById('delete-confirm-btn');
+            if (deleteBtn) deleteBtn.addEventListener('click', async ()=>{
+                try{
+                    if (typeof window.deleteSurvey === 'function'){
+                        await window.deleteSurvey(currentDeleteId);
+                    } else {
+                        const headers = (typeof window.getAuthHeaders === 'function') ? window.getAuthHeaders() : {'Content-Type':'application/json'};
+                        const res = await fetch(`${API_BASE_URL}/surveys/${currentDeleteId}`,{ method:'DELETE', headers });
+                        if (!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.error || 'Anket silinemedi'); }
+                    }
+                    showNotification(typeof t === 'function' ? t('notify.success') : 'Başarılı', typeof t === 'function' ? t('notify.survey_deleted') : 'Anket başarıyla silindi','success');
+                    document.getElementById('delete-modal').classList.add('hidden');
+                    await loadSurveys();
+                }catch(err){ showNotification(typeof t === 'function' ? t('notify.error') : 'Hata', err.message || (typeof t === 'function' ? t('notify.error') : 'Hata'), 'error'); }
+            });
+
+            // search
+            const searchEl = document.getElementById('search-survey');
+            if (searchEl) searchEl.addEventListener('input', (e)=>{
+                const q = (e.target.value || '').toLowerCase();
+                const filtered = surveys.filter(s => (s.title||'').toLowerCase().includes(q));
+                renderSurveys(filtered);
+            });
+
+            // notifications
+            function showNotification(title, message, type='info'){
+                const notification = document.getElementById('notification');
+                const icon = document.getElementById('notification-icon');
+                const titleEl = document.getElementById('notification-title');
+                const messageEl = document.getElementById('notification-message');
+                if (!notification) return console.warn(title, message);
+                titleEl.textContent = title; messageEl.textContent = message;
+                if (type==='success'){ notification.className='fixed top-4 right-4 max-w-sm shadow-lg rounded-lg p-4 fade-in z-40 bg-green-100 text-green-800'; icon.textContent='check_circle'; }
+                else if (type==='error'){ notification.className='fixed top-4 right-4 max-w-sm shadow-lg rounded-lg p-4 fade-in z-40 bg-red-100 text-red-800'; icon.textContent='error'; }
+                else if (type==='warning'){ notification.className='fixed top-4 right-4 max-w-sm shadow-lg rounded-lg p-4 fade-in z-40 bg-yellow-100 text-yellow-800'; icon.textContent='warning'; }
+                else { notification.className='fixed top-4 right-4 max-w-sm shadow-lg rounded-lg p-4 fade-in z-40 bg-blue-100 text-blue-800'; icon.textContent='info'; }
+                notification.classList.remove('hidden'); setTimeout(()=>notification.classList.add('hidden'),4000);
+            }
+
+            // language buttons: wire to backend/i18n.js setLanguage if available
+            document.querySelectorAll('[data-lang]').forEach(btn => {
+                btn.addEventListener('click', ()=>{
+                    const lang = btn.getAttribute('data-lang');
+                    if (typeof setLanguage === 'function') setLanguage(lang); else { localStorage.setItem('language', lang); location.reload(); }
+                });
+            });
+
+            // initialization
+            (async function init(){
+                await checkAPI();
+                await loadSurveys();
+            })();
+
+        } catch (err){ console.error('Dashboard init error', err); alert('Dashboard hata: '+(err.message||err)); }
+    })();
+
+    async function openContactModal() {
+        const modal = document.getElementById('contact-modal');
+        const tbody = document.getElementById('contact-messages-tbody');
+        const loading = document.getElementById('contact-loading');
+        const empty = document.getElementById('contact-empty');
+
+        modal.classList.remove('hidden');
+        tbody.innerHTML = '';
+        loading.classList.remove('hidden');
+        empty.classList.add('hidden');
+
+        try {
+            const response = await fetch('/api/contact-messages');
+            const messages = await response.json();
+
+            loading.classList.add('hidden');
+
+            if (messages.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            messages.forEach(msg => {
+                const date = new Date(msg.created_at).toLocaleDateString('tr-TR') + ' ' + new Date(msg.created_at).toLocaleTimeString('tr-TR');
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-border-light dark:border-border-dark hover:bg-slate-50 dark:hover:bg-slate-800/50';
+                tr.innerHTML = `
+                    <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">${date}</td>
+                    <td class="py-3 px-4 text-sm font-medium">${msg.name}</td>
+                    <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">${msg.email}</td>
+                    <td class="py-3 px-4 text-sm text-gray-600 dark:text-gray-400 max-w-xs truncate" title="${msg.message}">${msg.message}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        } catch (error) {
+            console.error('Error loading messages:', error);
+            loading.textContent = 'Hata oluştu.';
+        }
+    }
+    </script>
+</body>
+</html>

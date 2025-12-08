@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Müşteri geri bildirim anketi — yaklaşık 3 dakika sürer.">
-  <title>Müşteri Memnuniyeti Anketi</title>
+  <title>Anket</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -67,7 +67,7 @@
         </div>
 
         <!-- HeadlineText Component -->
-  <h1 id="survey-heading" class="text-[#0d141b] dark:text-white tracking-tight text-2xl sm:text-3xl font-bold leading-tight">Müşteri Memnuniyeti Anketi</h1>
+  <h1 id="survey-heading" class="text-[#0d141b] dark:text-white tracking-tight text-2xl sm:text-3xl font-bold leading-tight">Anket</h1>
   <!-- BodyText Component -->
         <p id="intro-text" class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal mt-2">Görüşleriniz bizim için önemli. Lütfen kısa anketi doldurmak için birkaç dakikanızı ayırın.</p>
       </div>
@@ -130,7 +130,7 @@
     (function () {
       const translations = {
         tr: {
-          title: 'Müşteri Memnuniyeti Anketi',
+          title: 'Anket',
           meta: 'Müşteri geri bildirim anketi — yaklaşık 3 dakika sürer.',
           intro: 'Görüşleriniz bizim için önemli. Lütfen kısa anketi doldurmak için birkaç dakikanızı ayırın.',
           list1: 'Deneyiminizi geliştirmemize yardımcı olun',
@@ -141,7 +141,7 @@
           startingMsg: 'Anket başlatılıyor...'
         },
         en: {
-          title: 'Customer Feedback Survey',
+          title: 'Survey',
           meta: 'Customer feedback survey — takes about 3 minutes.',
           intro: 'Your feedback is important to us. Please take a moment to complete this short survey.',
           list1: 'Help us improve your experience',
@@ -222,6 +222,7 @@
         localStorage.setItem('surveyConsent', 'true');
         showTemporaryMessage(currentMessages.startingMsg);
         // TODO: navigate to survey page or call callback
+        window.location.href = "{{ url_for('anket') }}";
       });
 
       function showTemporaryMessage(text) {

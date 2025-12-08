@@ -60,7 +60,7 @@ tailwind.config = {
 </div>
 <h2 class="text-lg font-bold tracking-tight cursor-pointer" onclick="showPage('home')">SurveyApp</h2>
 </div>
-<nav class="flex items-center gap-8">
+<nav class="hidden md:flex items-center gap-8">
 <button onclick="showPage('about')" class="text-sm font-medium hover:text-primary dark:hover:text-primary transition">
 <span class="en-text">About</span>
 <span class="tr-text hidden">Hakkında</span>
@@ -69,30 +69,17 @@ tailwind.config = {
 <span class="en-text">Contact</span>
 <span class="tr-text hidden">İletişim</span>
 </button>
+<a href="{{ url_for('admin') }}" class="text-sm font-medium hover:text-primary dark:hover:text-primary transition">
+<span class="en-text">Admin Panel</span>
+<span class="tr-text hidden">Yönetici Paneli</span>
+</a>
 <button onclick="toggleLanguage()" class="text-sm font-medium px-3 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition font-bold">
 <span class="en-text">TR</span>
 <span class="tr-text hidden">EN</span>
 </button>
-<button onclick="window.location.href='adminpaneli.html'" class="text-sm font-medium px-3 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white transition font-bold">
-<span class="en-text hidden">Admin Panel</span>
-<span class="tr-text">Admin Paneli</span>
-</button>
 </nav>
 </header>
 <main>
-<!-- Top Contact Info (inserted) -->
-<section class="py-6 page-section active" id="contact-top">
-  <div class="mx-auto max-w-3xl text-center">
-    <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-50">
-      <span class="en-text">Get In Touch</span>
-      <span class="tr-text hidden">İletişim Hakkında</span>
-    </h3>
-    <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">
-      <span class="en-text">Have a question? We'd love to hear from you.</span>
-      <span class="tr-text hidden">Bir sorunuz varsa, bize ulaşmaktan memnuniyet duyarız.</span>
-    </p>
-  </div>
-</section>
 <!-- HeroSection -->
 <section class="py-16 md:py-24 page-section active" id="home">
 <div class="flex flex-col-reverse items-center gap-12 @container md:flex-row">
@@ -107,12 +94,12 @@ tailwind.config = {
 <span class="tr-text hidden">Müşteri memnuniyetini ölçmek ve önemli geri bildirimler toplamak için dakikalar içinde güzel anketler oluşturun ve paylaşın.</span>
 </h2>
 </div>
-<button onclick="showPage('survey')" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center self-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 md:self-start">
+<a href="{{ url_for('survey_init') }}" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center self-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 md:self-start">
 <span class="truncate">
 <span class="en-text">Start Your First Survey for Free</span>
 <span class="tr-text hidden">İlk Anketinizi Ücretsiz Başlatın</span>
 </span>
-</button>
+</a>
 </div>
 <div class="w-full md:w-1/2">
 <div class="aspect-square w-full rounded-xl bg-slate-200 dark:bg-slate-800" data-alt="Abstract gradient background with blue and purple hues.">
@@ -197,21 +184,21 @@ tailwind.config = {
 <span class="tr-text hidden">Soru var mı yoksa daha fazla bilgi edinmek mi istiyorsunuz? Bize bir mesaj gönderin.</span>
 </p>
 </div>
-<form class="flex flex-col gap-6">
+<form class="flex flex-col gap-6" id="contactForm">
 <div class="flex flex-col gap-4 sm:flex-row">
 <label class="flex flex-col w-full">
 <p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
 <span class="en-text">Name</span>
 <span class="tr-text hidden">Ad</span>
 </p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="text"/>
+<input id="contact-name" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="text"/>
 </label>
 <label class="flex flex-col w-full">
 <p class="text-sm font-medium pb-2 text-slate-800 dark:text-slate-200">
 <span class="en-text">Email</span>
 <span class="tr-text hidden">E-posta</span>
 </p>
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="email"/>
+<input id="contact-email" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-base" type="email"/>
 </label>
 </div>
 <label class="flex flex-col w-full">
@@ -219,9 +206,9 @@ tailwind.config = {
 <span class="en-text">Your Message</span>
 <span class="tr-text hidden">Mesajınız</span>
 </p>
-<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary min-h-[120px] placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-base"></textarea>
+<textarea id="contact-message" class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-slate-900 dark:text-slate-50 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary dark:focus:border-primary min-h-[120px] placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 text-base"></textarea>
 </label>
-<button type="button" onclick="submitForm()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 w-full sm:w-auto sm:self-end">
+<button type="button" onclick="submitContactForm()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-slate-50 text-base font-bold tracking-wide transition-colors hover:bg-primary/90 w-full sm:w-auto sm:self-end">
 <span>
 <span class="en-text">Send Message</span>
 <span class="tr-text hidden">Mesajı Gönder</span>
@@ -333,25 +320,6 @@ tailwind.config = {
 </div>
 </section>
 </main>
-<!-- Admin Section (placeholder) -->
-<section class="py-16 md:py-24 page-section" id="admin">
-  <div class="mx-auto max-w-2xl">
-    <div class="flex flex-col gap-8 text-center">
-      <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-        <span class="en-text">Admin Panel</span>
-        <span class="tr-text hidden">Admin Paneli</span>
-      </h2>
-      <p class="text-base text-slate-600 dark:text-slate-400">
-        <span class="en-text">This area is reserved for administrators. Login will be added later.</span>
-        <span class="tr-text hidden">Bu alan yöneticiler için ayrılmıştır. Giriş daha sonra eklenecektir.</span>
-      </p>
-      <button onclick="showPage('home')" class="mt-6 w-full sm:w-auto py-3 px-6 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-50 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition">
-        <span class="en-text">← Back to Home</span>
-        <span class="tr-text hidden">← Ana Sayfaya Dön</span>
-      </button>
-    </div>
-  </div>
-</section>
 <!-- Footer -->
 <footer class="py-8 border-t border-slate-200 dark:border-slate-800">
 <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
@@ -448,13 +416,13 @@ function updateLanguage() {
 // Submit survey
 function submitSurvey() {
   // Redirect to thank you page
-  window.location.href = 'tesekkur.html';
+  window.location.href = "{{ url_for('tesekkur') }}";
 }
 
 // Submit form
 function submitForm() {
   // Redirect to thank you page
-  window.location.href = 'tesekkur.html';
+  window.location.href = "{{ url_for('tesekkur') }}";
 }
 
 // Initialize
@@ -462,6 +430,38 @@ document.addEventListener('DOMContentLoaded', function() {
   updateLanguage();
   showPage('home');
 });
+</script>
+<script>
+async function submitContactForm() {
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const message = document.getElementById('contact-message').value;
+
+    if (!name || !email || !message) {
+        alert('Lütfen tüm alanları doldurun / Please fill all fields');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, message })
+        });
+
+        if (response.ok) {
+            alert('Mesajınız gönderildi / Message sent');
+            document.getElementById('contactForm').reset();
+        } else {
+            alert('Hata oluştu / Error occurred');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Bağlantı hatası / Connection error');
+    }
+}
 </script>
 
 </html>
