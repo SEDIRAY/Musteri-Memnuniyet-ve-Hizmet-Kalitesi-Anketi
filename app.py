@@ -3,8 +3,22 @@ from models import db, Survey, Response, Question, ContactMessage
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///surveys.db'
+
+# Veritabanı dosyasının tam yolunu belirle (Absolute Path)
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(basedir, 'instance', 'surveys.db')
+
+# Instance klasörünün var olduğundan emin ol
+if not os.path.exists(os.path.join(basedir, 'instance')):
+    os.makedirs(os.path.join(basedir, 'instance'))
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or 'sqlite:///' + db_path
+if app.config['SQLALCHEMY_DATABASE_URI'].startswith("postgres://"):
+    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace("postgres://", "postgresql://", 1)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+print(f"Veritabanı yolu: {db_path}")
 
 db.init_app(app)
 
